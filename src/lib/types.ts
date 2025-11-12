@@ -1,3 +1,8 @@
+export type HourlyConsumption = {
+  hour: string;
+  consumption: number;
+}
+
 export type DailyConsumption = {
   date: string;
   consumption: number;
