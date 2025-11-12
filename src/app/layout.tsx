@@ -26,7 +26,7 @@ export default function RootLayout({
       <body className="font-body antialiased">
         <div className="flex flex-col min-h-screen">
           <AppHeader />
-          <main className="flex-grow p-4 sm:p-6 lg:p-8 pt-20">{children}</main>
+          <main className="flex-grow p-4 sm:p-6 lg:p-8 pt-16">{children}</main>
           <Toaster />
         </div>
       </body>
