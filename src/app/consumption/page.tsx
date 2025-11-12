@@ -11,11 +11,11 @@ import { LineChart } from 'lucide-react';
 import { useState, useMemo } from 'react';
 
 export default function ConsumptionPage() {
-  const today = new Date();
-  const [selectedDate, setSelectedDate] = useState<Date>(today);
-  const [selectedMonth, setSelectedMonth] = useState<number>(today.getMonth());
-  const [selectedYearForDaily, setSelectedYearForDaily] = useState<number>(today.getFullYear());
-  const [selectedYearForMonthly, setSelectedYearForMonthly] = useState<number>(today.getFullYear());
+  const defaultDate = new Date('2024-01-01');
+  const [selectedDate, setSelectedDate] = useState<Date>(defaultDate);
+  const [selectedMonth, setSelectedMonth] = useState<number>(defaultDate.getMonth());
+  const [selectedYearForDaily, setSelectedYearForDaily] = useState<number>(defaultDate.getFullYear());
+  const [selectedYearForMonthly, setSelectedYearForMonthly] = useState<number>(defaultDate.getFullYear());
 
   const hourlyData = useMemo(() => getHourlyConsumptionForDay(selectedDate), [selectedDate]);
   const dailyData = useMemo(() => getDailyConsumptionForMonth(selectedYearForDaily, selectedMonth), [selectedYearForDaily, selectedMonth]);

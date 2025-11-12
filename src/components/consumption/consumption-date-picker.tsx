@@ -20,6 +20,8 @@ type ConsumptionDatePickerProps = {
 }
 
 export function ConsumptionDatePicker({ date, onDateChange }: ConsumptionDatePickerProps) {
+  const toDate = new Date('2024-12-31');
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -41,6 +43,8 @@ export function ConsumptionDatePicker({ date, onDateChange }: ConsumptionDatePic
           onSelect={onDateChange}
           initialFocus
           locale={ca}
+          toDate={toDate}
+          disabled={{ after: toDate }}
         />
       </PopoverContent>
     </Popover>
