@@ -81,7 +81,7 @@ export function ConsumptionView({
   selectedYearForMonthly,
 }: ConsumptionViewProps) {
   const [activeTab, setActiveTab] = useState('horari');
-  const currentYear = new Date().getFullYear();
+  const currentYear = 2024;
   const years = Array.from({ length: 10 }, (_, i) => (currentYear - i).toString());
   const months = [
     { value: '0', label: 'Gener' },
