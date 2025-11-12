@@ -7,7 +7,6 @@ import {
   YAxis,
   Tooltip,
   Legend,
-  ResponsiveContainer,
 } from 'recharts';
 import {
   Card,
@@ -16,7 +15,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ChartTooltipContent } from '@/components/ui/chart';
+import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
 import {
   getMonthlyConsumptionForUser,
   getAverageMonthlyConsumption,
@@ -63,8 +62,8 @@ export default function AwarenessPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={400}>
-            <BarChart data={combinedData}>
+          <ChartContainer config={chartConfig} className="h-[400px] w-full">
+            <BarChart data={combinedData} accessibilityLayer>
               <CartesianGrid vertical={false} />
               <XAxis
                 dataKey="month"
@@ -83,17 +82,17 @@ export default function AwarenessPage() {
               <Bar
                 dataKey="userConsumption"
                 name={chartConfig.userConsumption.label}
-                fill={chartConfig.userConsumption.color}
+                fill="var(--color-userConsumption)"
                 radius={4}
               />
               <Bar
                 dataKey="averageConsumption"
                 name={chartConfig.averageConsumption.label}
-                fill={chartConfig.averageConsumption.color}
+                fill="var(--color-averageConsumption)"
                 radius={4}
               />
             </BarChart>
-          </ResponsiveContainer>
+          </ChartContainer>
         </CardContent>
       </Card>
     </div>
