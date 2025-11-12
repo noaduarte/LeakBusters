@@ -34,6 +34,14 @@ import type {
   MonthlyConsumption,
 } from '@/lib/types';
 import { ConsumptionDatePicker } from './consumption-date-picker';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { useState } from 'react';
 
 const chartConfig = {
   consumption: {
@@ -53,6 +61,24 @@ export function ConsumptionView({
   dailyData,
   monthlyData,
 }: ConsumptionViewProps) {
+  const [activeTab, setActiveTab] = useState('daily');
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 10 }, (_, i) => (currentYear - i).toString());
+  const months = [
+    { value: '0', label: 'Gener' },
+    { value: '1', label: 'Febrer' },
+    { value: '2', label: 'Març' },
+    { value: '3', label: 'Abril' },
+    { value: '4', label: 'Maig' },
+    { value: '5', label: 'Juny' },
+    { value: '6', label: 'Juliol' },
+    { value: '7', label: 'Agost' },
+    { value: '8', label: 'Setembre' },
+    { value: '9', label: 'Octubre' },
+    { value: '10', label: 'Novembre' },
+    { value: '11', label: 'Desembre' },
+  ];
+
   return (
     <Card>
       <CardHeader>
@@ -62,14 +88,52 @@ export function ConsumptionView({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Tabs defaultValue="daily">
-          <div className="flex justify-between items-center">
+        <Tabs defaultValue="daily" onValueChange={setActiveTab}>
+          <div className="flex justify-between items-center flex-wrap gap-4">
             <TabsList className="grid grid-cols-3 w-auto">
               <TabsTrigger value="daily">Diari</TabsTrigger>
               <TabsTrigger value="monthly">Mensual</TabsTrigger>
               <TabsTrigger value="yearly">Anual</TabsTrigger>
             </TabsList>
-            <ConsumptionDatePicker />
+            <div className="flex items-center gap-2">
+              {activeTab === 'daily' && <ConsumptionDatePicker />}
+              {activeTab === 'monthly' && (
+                <>
+                  <Select>
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Selecciona un mes" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {months.map(month => (
+                        <SelectItem key={month.value} value={month.value}>{month.label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                   <Select>
+                    <SelectTrigger className="w-[120px]">
+                      <SelectValue placeholder="Any" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {years.map(year => (
+                        <SelectItem key={year} value={year}>{year}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </>
+              )}
+              {activeTab === 'yearly' && (
+                 <Select>
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Selecciona un any" />
+                    </SelectTrigger>
+                    <SelectContent>
+                       {years.map(year => (
+                        <SelectItem key={year} value={year}>{year}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+              )}
+            </div>
           </div>
           <TabsContent value="daily" className="mt-6">
             <ChartContainer config={chartConfig} className="h-72 w-full">
@@ -120,7 +184,7 @@ export function ConsumptionView({
               <BarChart data={monthlyData} accessibilityLayer>
                 <CartesianGrid vertical={false} />
                 <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={8} />
-                <YAxis tickFormatter={(value) => `${value / 1000}k L`} />
+                <YAxis tickFormatter={(value) => `${Math.round(value / 1000)}k L`} />
                 <Tooltip content={<ChartTooltipContent indicator="dot" />} />
                 <Legend />
                 <Bar
