@@ -75,7 +75,7 @@ export function ConsumptionView({
                 <CartesianGrid vertical={false} />
                 <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} />
                 <YAxis
-                  tickFormatter={(value) => `${value} gal`}
+                  tickFormatter={(value) => `${value} L`}
                   domain={['dataMin - 20', 'dataMax + 20']}
                 />
                 <Tooltip content={<ChartTooltipContent />} />
@@ -94,7 +94,7 @@ export function ConsumptionView({
               <BarChart data={monthlyData} accessibilityLayer>
                 <CartesianGrid vertical={false} />
                 <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={8} />
-                <YAxis tickFormatter={(value) => `${value / 1000}k gal`} />
+                <YAxis tickFormatter={(value) => `${value / 1000}k L`} />
                 <Tooltip content={<ChartTooltipContent />} />
                 <Bar
                   dataKey="consumption"
@@ -109,7 +109,7 @@ export function ConsumptionView({
               <BarChart data={yearlyData} accessibilityLayer>
                 <CartesianGrid vertical={false} />
                 <XAxis dataKey="year" tickLine={false} axisLine={false} tickMargin={8} />
-                <YAxis tickFormatter={(value) => `${value / 1000}k gal`} />
+                <YAxis tickFormatter={(value) => `${value / 1000}k L`} />
                 <Tooltip content={<ChartTooltipContent />} />
                 <Bar
                   dataKey="consumption"

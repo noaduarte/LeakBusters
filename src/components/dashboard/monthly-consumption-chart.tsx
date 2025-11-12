@@ -23,7 +23,7 @@ import { TrendingUp } from 'lucide-react';
 
 const chartConfig = {
   consumption: {
-    label: 'Consum (Galons)',
+    label: 'Consum (Litres)',
     color: 'hsl(var(--primary))',
   },
 };

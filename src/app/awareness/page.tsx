@@ -76,7 +76,7 @@ export default function AwarenessPage() {
                 tickMargin={8}
               />
               <YAxis
-                tickFormatter={(value) => `${Math.round(value / 1000)}k gal`}
+                tickFormatter={(value) => `${Math.round(value / 1000)}k L`}
               />
               <Tooltip
                 content={<ChartTooltipContent indicator="dot" />}
