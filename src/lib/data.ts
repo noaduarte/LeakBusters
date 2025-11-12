@@ -1,47 +1,74 @@
 import type {
-  DailyConsumption,
-  MonthlyConsumption,
-  YearlyConsumption,
   Bill,
+  ConsumptionRecord,
 } from './types';
+import consumptionData from '@/lib/data/dataset_cliente.json' with { type: 'json' };
 
-export const dailyConsumption: DailyConsumption[] = Array.from(
-  { length: 30 },
-  (_, i) => {
-    const date = new Date();
-    date.setDate(date.getDate() - (30 - i));
-    return {
-      date: date.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-      }),
-      consumption: Math.floor(Math.random() * (150 - 80 + 1) + 80), // Random value between 80 and 150
-    };
-  }
-);
+// Type assertion for the imported JSON data
+const typedConsumptionData: ConsumptionRecord[] = consumptionData as ConsumptionRecord[];
 
-export const monthlyConsumption: MonthlyConsumption[] = [
-  { month: 'Jan', consumption: 3200 },
-  { month: 'Feb', consumption: 3000 },
-  { month: 'Mar', consumption: 3500 },
-  { month: 'Apr', consumption: 3700 },
-  { month: 'May', consumption: 4200 },
-  { month: 'Jun', consumption: 4800 },
-  { month: 'Jul', consumption: 5100 },
-  { month: 'Aug', consumption: 4900 },
-  { month: 'Sep', consumption: 4300 },
-  { month: 'Oct', consumption: 3800 },
-  { month: 'Nov', consumption: 3400 },
-  { month: 'Dec', consumption: 3600 },
-];
 
-export const yearlyConsumption: YearlyConsumption[] = [
-  { year: 2020, consumption: 45000 },
-  { year: 2021, consumption: 47000 },
-  { year: 2022, consumption: 46500 },
-  { year: 2023, consumption: 48200 },
-  { year: 2024, consumption: 47500 },
-];
+const getMonthlyConsumption = (data: ConsumptionRecord[]) => {
+  const monthlyTotals: { [key: string]: number } = {};
+  const monthNames = ["Gen", "Feb", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Des"];
+
+  data.forEach(record => {
+    const date = new Date(record.lectura_fecha);
+    const month = date.getMonth();
+    const year = date.getFullYear();
+    const key = `${year}-${monthNames[month]}`;
+    if (!monthlyTotals[key]) {
+      monthlyTotals[key] = 0;
+    }
+    monthlyTotals[key] += record.consum_registrat_m3;
+  });
+
+  return Object.entries(monthlyTotals).map(([month, consumption]) => ({
+    month: month.split('-')[1],
+    consumption: Math.round(consumption * 264.172), // m3 to gallons
+  })).slice(-12); // Get last 12 months
+};
+
+export const getDailyConsumptionForUser = (polizaSubm: string) => {
+  const userData = typedConsumptionData.filter(d => d.poliza_subm === polizaSubm);
+  return userData.map(record => ({
+    date: new Date(record.lectura_fecha).toLocaleDateString('ca-ES', { month: 'short', day: 'numeric' }),
+    consumption: Math.round(record.consum_registrat_m3 * 264.172), // m3 to gallons
+  })).slice(-30); // Last 30 days
+};
+
+
+export const getMonthlyConsumptionForUser = (polizaSubm: string) => {
+    const userData = typedConsumptionData.filter(d => d.poliza_subm === polizaSubm);
+    return getMonthlyConsumption(userData);
+};
+
+export const getYearlyConsumptionForUser = (polizaSubm: string) => {
+    const userData = typedConsumptionData.filter(d => d.poliza_subm === polizaSubm);
+    const yearlyTotals: { [key: number]: number } = {};
+
+    userData.forEach(record => {
+        const year = new Date(record.lectura_fecha).getFullYear();
+        if (!yearlyTotals[year]) {
+            yearlyTotals[year] = 0;
+        }
+        yearlyTotals[year] += record.consum_registrat_m3;
+    });
+
+    return Object.entries(yearlyTotals).map(([year, consumption]) => ({
+        year: parseInt(year, 10),
+        consumption: Math.round(consumption * 264.172), // m3 to gallons
+    }));
+};
+
+export const getAverageMonthlyConsumption = () => {
+    return getMonthlyConsumption(typedConsumptionData);
+}
+
+export const dailyConsumption = getDailyConsumptionForUser('999000011116');
+export const monthlyConsumption = getMonthlyConsumptionForUser('999000011116');
+export const yearlyConsumption = getYearlyConsumptionForUser('999000011116');
+
 
 export const bills: Bill[] = [
   {

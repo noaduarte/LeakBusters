@@ -26,3 +26,9 @@ export type AppSettings = {
   databaseConnectionString: string;
   modelDataUri: string;
 };
+
+export type ConsumptionRecord = {
+  lectura_fecha: string;
+  poliza_subm: string;
+  consum_registrat_m3: number;
+};

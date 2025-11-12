@@ -5,7 +5,7 @@ import { AppHeader } from '@/components/layout/app-header';
 
 export const metadata: Metadata = {
   title: 'AB Data Challenge',
-  description: 'Monitoritza el teu consum d\'aigua i preveu fuites.',
+  description: "Monitoritza el teu consum d'aigua i preveu fuites.",
 };
 
 export default function RootLayout({
@@ -24,9 +24,11 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased">
-        <AppHeader />
-        <main className="p-4 sm:p-6 lg:p-8 pt-20">{children}</main>
-        <Toaster />
+        <div className="flex flex-col min-h-screen">
+          <AppHeader />
+          <main className="flex-grow p-4 sm:p-6 lg:p-8 pt-20">{children}</main>
+          <Toaster />
+        </div>
       </body>
     </html>
   );

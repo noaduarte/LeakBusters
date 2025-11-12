@@ -4,13 +4,11 @@ import {
   FileText,
   LayoutDashboard,
   LineChart,
-  Lightbulb,
-  Settings,
+  Users,
 } from 'lucide-react';
 import { MonthlyConsumptionChart } from '@/components/dashboard/monthly-consumption-chart';
 import { LeakPrediction } from '@/components/dashboard/leak-prediction';
-import { monthlyConsumption } from '@/lib/data';
-
+import { getMonthlyConsumptionForUser } from '@/lib/data';
 
 export default function Home() {
   const quickLinks = [
@@ -21,10 +19,10 @@ export default function Home() {
       description: 'Consulta gràfics de consum diari, mensual i anual.',
     },
     {
-      title: 'Recomanacions',
-      href: '/recommendations',
-      icon: <Lightbulb className="size-6 text-primary" />,
-      description: 'Obtén consells per reduir el teu consum d\'aigua.',
+      title: 'Conscienciació',
+      href: '/awareness',
+      icon: <Users className="size-6 text-primary" />,
+      description: "Compara el teu consum d'aigua amb la mitjana.",
     },
     {
       title: 'Historial de Factures',
@@ -32,13 +30,10 @@ export default function Home() {
       icon: <FileText className="size-6 text-primary" />,
       description: 'Accedeix a les teves factures mensuals passades i actuals.',
     },
-    {
-      title: 'Configuració',
-      href: '/settings',
-      icon: <Settings className="size-6 text-primary" />,
-      description: 'Configura les teves fonts de dades i models de predicció.',
-    },
   ];
+
+  // We are using a specific user's data as requested
+  const monthlyConsumption = getMonthlyConsumptionForUser('999000011116');
 
   return (
     <div className="flex flex-col gap-8">
@@ -57,7 +52,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-6 sm:grid-cols-1 lg:grid-cols-3">
         {quickLinks.map((link) => (
           <StatCard
             key={link.title}
