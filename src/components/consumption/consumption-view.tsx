@@ -54,12 +54,28 @@ type ConsumptionViewProps = {
   hourlyData: HourlyConsumption[];
   dailyData: DailyConsumption[];
   monthlyData: MonthlyConsumption[];
+  onDateChange: (date: Date | undefined) => void;
+  onMonthChange: (month: string) => void;
+  onYearChangeForDaily: (year: string) => void;
+  onYearChangeForMonthly: (year: string) => void;
+  selectedDate: Date;
+  selectedMonth: number;
+  selectedYear: number;
+  selectedYearForMonthly: number;
 };
 
 export function ConsumptionView({
   hourlyData,
   dailyData,
   monthlyData,
+  onDateChange,
+  onMonthChange,
+  onYearChangeForDaily,
+  onYearChangeForMonthly,
+  selectedDate,
+  selectedMonth,
+  selectedYear,
+  selectedYearForMonthly,
 }: ConsumptionViewProps) {
   const [activeTab, setActiveTab] = useState('daily');
   const currentYear = new Date().getFullYear();
@@ -88,7 +104,7 @@ export function ConsumptionView({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Tabs defaultValue="daily" onValueChange={setActiveTab}>
+        <Tabs defaultValue="daily" onValueChange={setActiveTab} value={activeTab}>
           <div className="flex justify-between items-center flex-wrap gap-4">
             <TabsList className="grid grid-cols-3 w-auto">
               <TabsTrigger value="daily">Diari</TabsTrigger>
@@ -96,10 +112,15 @@ export function ConsumptionView({
               <TabsTrigger value="yearly">Anual</TabsTrigger>
             </TabsList>
             <div className="flex items-center gap-2">
-              {activeTab === 'daily' && <ConsumptionDatePicker />}
+              {activeTab === 'daily' && (
+                <ConsumptionDatePicker
+                  date={selectedDate}
+                  onDateChange={onDateChange}
+                />
+              )}
               {activeTab === 'monthly' && (
                 <>
-                  <Select>
+                  <Select value={selectedMonth.toString()} onValueChange={onMonthChange}>
                     <SelectTrigger className="w-[180px]">
                       <SelectValue placeholder="Selecciona un mes" />
                     </SelectTrigger>
@@ -109,7 +130,7 @@ export function ConsumptionView({
                       ))}
                     </SelectContent>
                   </Select>
-                   <Select>
+                   <Select value={selectedYear.toString()} onValueChange={onYearChangeForDaily}>
                     <SelectTrigger className="w-[120px]">
                       <SelectValue placeholder="Any" />
                     </SelectTrigger>
@@ -122,7 +143,7 @@ export function ConsumptionView({
                 </>
               )}
               {activeTab === 'yearly' && (
-                 <Select>
+                 <Select value={selectedYearForMonthly.toString()} onValueChange={onYearChangeForMonthly}>
                     <SelectTrigger className="w-[180px]">
                       <SelectValue placeholder="Selecciona un any" />
                     </SelectTrigger>

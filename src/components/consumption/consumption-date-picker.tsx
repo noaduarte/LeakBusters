@@ -14,9 +14,12 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-export function ConsumptionDatePicker() {
-  const [date, setDate] = React.useState<Date>()
+type ConsumptionDatePickerProps = {
+  date: Date | undefined;
+  onDateChange: (date: Date | undefined) => void;
+}
 
+export function ConsumptionDatePicker({ date, onDateChange }: ConsumptionDatePickerProps) {
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -35,7 +38,7 @@ export function ConsumptionDatePicker() {
         <Calendar
           mode="single"
           selected={date}
-          onSelect={setDate}
+          onSelect={onDateChange}
           initialFocus
           locale={ca}
         />

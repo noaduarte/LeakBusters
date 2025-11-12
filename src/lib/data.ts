@@ -5,171 +5,143 @@ import type {
   HourlyConsumption,
   MonthlyConsumption,
 } from './types';
-import consumptionData from './data/dades_sensefuites_ambconsums.json' with { type: 'json' };
+import consumptionData from '../../data/dades_user1.json';
 
 const typedConsumptionData: ConsumptionRecord[] = consumptionData as ConsumptionRecord[];
 
+const getHourlyData = (day: Date): HourlyConsumption[] => {
+  const hourlyConsumption: { [key: number]: number } = {};
+  const hourCounts: { [key: number]: number } = {};
 
-// --- DATA GENERATION HELPERS (MOCKING FOR GRANULARITY) ---
+  typedConsumptionData.forEach(record => {
+    if (record.CONSUMO_REAL === null) return;
 
-// Helper to generate random hourly data for a specific day
-const generateHourlyData = (baseConsumption: number): HourlyConsumption[] => {
-    const data: HourlyConsumption[] = [];
-    for (let i = 0; i < 24; i++) {
-        const hour = `${i.toString().padStart(2, '0')}:00`;
-        // Simulate consumption peaks in the morning and evening
-        let consumption;
-        if (i > 6 && i < 10) { // Morning peak
-            consumption = baseConsumption + Math.random() * 20;
-        } else if (i > 18 && i < 22) { // Evening peak
-            consumption = baseConsumption + Math.random() * 25;
-        } else {
-            consumption = baseConsumption + Math.random() * 10;
-        }
-        data.push({ hour, consumption: Math.round(consumption) });
+    const recordDate = new Date(record.FECHA_HORA);
+    if (
+      recordDate.getFullYear() === day.getFullYear() &&
+      recordDate.getMonth() === day.getMonth() &&
+      recordDate.getDate() === day.getDate()
+    ) {
+      const hour = recordDate.getHours();
+      if (!hourlyConsumption[hour]) {
+        hourlyConsumption[hour] = 0;
+        hourCounts[hour] = 0;
+      }
+      hourlyConsumption[hour] += record.CONSUMO_REAL;
+      hourCounts[hour] += 1;
     }
-    return data;
+  });
+
+  const result: HourlyConsumption[] = [];
+  for (let i = 0; i < 24; i++) {
+    result.push({
+      hour: `${i.toString().padStart(2, '0')}:00`,
+      consumption: hourlyConsumption[i] ? Math.round(hourlyConsumption[i]) : 0,
+    });
+  }
+  return result;
 };
 
-// Helper to get the number of days in a month
-const daysInMonth = (year: number, month: number) => new Date(year, month + 1, 0).getDate();
 
+export const getHourlyConsumptionForDay = (day: Date): HourlyConsumption[] => {
+  return getHourlyData(day);
+};
 
-// --- NEW DATA FUNCTIONS ---
-
-export const getHourlyConsumptionForDay = (polizaSubm: string, day: Date): HourlyConsumption[] => {
-    // We don't have real hourly data, so we'll simulate it based on daily average
-    const userDayRecord = typedConsumptionData.find(d => {
-        const recordDate = new Date(d.lectura_fecha);
-        return d.poliza_subm === polizaSubm &&
-               recordDate.getFullYear() === day.getFullYear() &&
-               recordDate.getMonth() === day.getMonth() &&
-               recordDate.getDate() === day.getDate();
-    });
-
-    const dailyTotal = userDayRecord ? userDayRecord.consum_registrat_m3 * 1000 : 15000; // Default to 15k L if no data
-    const baseHourlyConsumption = dailyTotal / 24 / 2; // A base to add randomness to
-    return generateHourlyData(baseHourlyConsumption);
-}
-
-
-export const getDailyConsumptionForMonth = (polizaSubm: string, year: number, month: number): DailyConsumption[] => {
-    const userData = typedConsumptionData.filter(d => {
-        const recordDate = new Date(d.lectura_fecha);
-        return d.poliza_subm === polizaSubm &&
-               recordDate.getFullYear() === year &&
-               recordDate.getMonth() === month;
-    });
-
-    // If we have real daily records for the month, use them
-    if (userData.length > 1) {
-        return userData.map(record => ({
-            date: new Date(record.lectura_fecha).toLocaleDateString('ca-ES', { day: 'numeric' }),
-            consumption: Math.round(record.consum_registrat_m3 * 1000),
-        })).sort((a, b) => parseInt(a.date) - parseInt(b.date));
+export const getDailyConsumptionForMonth = (year: number, month: number): DailyConsumption[] => {
+  const dailyTotals: { [key: number]: number } = {};
+  
+  typedConsumptionData.forEach(record => {
+    if (record.CONSUMO_REAL === null) return;
+    const recordDate = new Date(record.FECHA_HORA);
+    if (
+      recordDate.getFullYear() === year &&
+      recordDate.getMonth() === month
+    ) {
+      const day = recordDate.getDate();
+      if (!dailyTotals[day]) {
+        dailyTotals[day] = 0;
+      }
+      dailyTotals[day] += record.CONSUMO_REAL;
     }
-    
-    // Otherwise, simulate daily data for the month
-    const monthlyRecord = typedConsumptionData.find(d => {
-       const recordDate = new Date(d.lectura_fecha);
-        return d.poliza_subm === polizaSubm &&
-               recordDate.getFullYear() === year &&
-               recordDate.getMonth() === month;
+  });
+
+  const result: DailyConsumption[] = [];
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  for (let i = 1; i <= daysInMonth; i++) {
+    result.push({
+      date: i.toString(),
+      consumption: dailyTotals[i] ? Math.round(dailyTotals[i]) : 0,
     });
+  }
+  return result;
+};
 
-    const dailyData: DailyConsumption[] = [];
-    const numDays = daysInMonth(year, month);
-    const monthlyTotal = monthlyRecord ? monthlyRecord.consum_registrat_m3 * 1000 : 450000; // Default to 450k L
-    const averageDaily = monthlyTotal / numDays;
-
-    for (let i = 1; i <= numDays; i++) {
-        // Simulate weekend vs weekday
-        const dayOfWeek = new Date(year, month, i).getDay();
-        const variation = (dayOfWeek === 0 || dayOfWeek === 6) ? 1.2 : 0.9; // Higher on weekends
-        const consumption = averageDaily * variation + (Math.random() - 0.5) * 5000; // Add some noise
-        dailyData.push({
-            date: i.toString(),
-            consumption: Math.round(consumption),
-        });
-    }
-    return dailyData;
-}
-
-
-export const getMonthlyConsumptionForYear = (polizaSubm: string, year: number) => {
-    const userData = typedConsumptionData.filter(d => {
-        const recordDate = new Date(d.lectura_fecha);
-        return d.poliza_subm === polizaSubm && recordDate.getFullYear() === year;
-    });
-    
+export const getMonthlyConsumptionForYear = (year: number): MonthlyConsumption[] => {
     const monthlyTotals: { [key: number]: number } = {};
     const monthNames = ["Gen", "Feb", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Des"];
 
-    userData.forEach(record => {
-        const date = new Date(record.lectura_fecha);
-        const month = date.getMonth();
-        if (!monthlyTotals[month]) {
-            monthlyTotals[month] = 0;
+    typedConsumptionData.forEach(record => {
+        if (record.CONSUMO_REAL === null) return;
+        const recordDate = new Date(record.FECHA_HORA);
+        if (recordDate.getFullYear() === year) {
+            const month = recordDate.getMonth();
+            if (!monthlyTotals[month]) {
+                monthlyTotals[month] = 0;
+            }
+            monthlyTotals[month] += record.CONSUMO_REAL;
         }
-        monthlyTotals[month] += record.consum_registrat_m3;
     });
 
     const result: MonthlyConsumption[] = [];
     for (let i = 0; i < 12; i++) {
         result.push({
             month: monthNames[i],
-            consumption: monthlyTotals[i] ? Math.round(monthlyTotals[i] * 1000) : 0,
+            consumption: monthlyTotals[i] ? Math.round(monthlyTotals[i]) : 0,
         });
     }
     return result;
 };
 
 
-// --- LEGACY & PAGE-SPECIFIC DATA ---
-// These are kept for other pages that might still use them.
-
-export const getMonthlyConsumptionForUser = (polizaSubm: string) => {
-    const userData = typedConsumptionData.filter(d => d.poliza_subm === polizaSubm);
-    const monthlyTotals: { [key: string]: number } = {};
-    const monthNames = ["Gen", "Feb", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Des"];
-
-    userData.forEach(record => {
-        const date = new Date(record.lectura_fecha);
-        const month = date.getMonth();
-        const year = date.getFullYear();
-        const key = `${year}-${monthNames[month]}`;
-        if (!monthlyTotals[key]) {
-        monthlyTotals[key] = 0;
-        }
-        monthlyTotals[key] += record.consum_registrat_m3;
-    });
-
-    return Object.entries(monthlyTotals).map(([month, consumption]) => ({
-        month: month.split('-')[1],
-        consumption: Math.round(consumption * 1000), // m3 to liters
-    })).slice(-12);
-};
-
-export const getAverageMonthlyConsumption = () => {
+export const getMonthlyConsumptionForUser = () => {
     const monthlyTotals: { [key: string]: number } = {};
     const monthNames = ["Gen", "Feb", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Des"];
 
     typedConsumptionData.forEach(record => {
-        const date = new Date(record.lectura_fecha);
+        if (record.CONSUMO_REAL === null) return;
+        const date = new Date(record.FECHA_HORA);
         const month = date.getMonth();
         const year = date.getFullYear();
-        const key = `${year}-${monthNames[month]}`;
+        const key = `${year}-${month.toString().padStart(2, '0')}`;
         if (!monthlyTotals[key]) {
-        monthlyTotals[key] = 0;
+            monthlyTotals[key] = 0;
         }
-        monthlyTotals[key] += record.consum_registrat_m3;
+        monthlyTotals[key] += record.CONSUMO_REAL;
     });
 
-    return Object.entries(monthlyTotals).map(([month, consumption]) => ({
-        month: month.split('-')[1],
-        consumption: Math.round(consumption * 1000),
-    })).slice(-12);
+    const sortedMonths = Object.keys(monthlyTotals).sort().slice(-12);
+
+    return sortedMonths.map(key => {
+        const [year, monthIndex] = key.split('-');
+        return {
+            month: monthNames[parseInt(monthIndex, 10)],
+            consumption: Math.round(monthlyTotals[key]),
+        };
+    });
+};
+
+
+export const getAverageMonthlyConsumption = () => {
+    // This is now a placeholder as we only have one user's data.
+    // In a real scenario, you'd calculate this across all users.
+    // For now, we'll create a slightly altered version of the user's data.
+    const baseData = getMonthlyConsumptionForUser();
+    return baseData.map(d => ({
+        ...d,
+        consumption: Math.round(d.consumption * (Math.random() * 0.4 + 0.8)) // +/- 20% variation
+    }));
 }
+
 
 export const bills: Bill[] = [
   {

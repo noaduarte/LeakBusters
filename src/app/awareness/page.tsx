@@ -36,12 +36,9 @@ const chartConfig = {
 };
 
 export default function AwarenessPage() {
-  // Using a specific user for now as requested
-  const userId = '999000011116';
-  const userConsumptionData = getMonthlyConsumptionForUser(userId);
+  const userConsumptionData = getMonthlyConsumptionForUser();
   const averageConsumptionData = getAverageMonthlyConsumption();
 
-  // We need to merge the data to display it on the same chart
   const combinedData = averageConsumptionData.map((avg) => {
     const userMonth = userConsumptionData.find((uc) => uc.month === avg.month);
     return {

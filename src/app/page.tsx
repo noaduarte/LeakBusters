@@ -1,8 +1,6 @@
 import { StatCard } from '@/components/dashboard/stat-card';
-import { PageHeader } from '@/components/page-header';
 import {
   FileText,
-  LayoutDashboard,
   LineChart,
   Users,
 } from 'lucide-react';
@@ -33,8 +31,7 @@ export default function Home() {
     },
   ];
 
-  // We are using a specific user's data as requested
-  const monthlyConsumption = getMonthlyConsumptionForUser('999000011116');
+  const monthlyConsumption = getMonthlyConsumptionForUser();
 
   return (
     <div className="flex flex-col gap-8">

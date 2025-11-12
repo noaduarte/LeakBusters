@@ -33,7 +33,6 @@ export type AppSettings = {
 };
 
 export type ConsumptionRecord = {
-  lectura_fecha: string;
-  poliza_subm: string;
-  consum_registrat_m3: number;
+  FECHA_HORA: number;
+  CONSUMO_REAL: number | null;
 };
