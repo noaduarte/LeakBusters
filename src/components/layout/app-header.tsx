@@ -10,7 +10,7 @@ export function AppHeader() {
   const router = useRouter();
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-20 flex items-center justify-between p-2 border-b bg-background/80 backdrop-blur-sm h-16">
+    <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between p-2 border-b bg-background/80 backdrop-blur-sm h-16">
       <div className="flex items-center gap-2">
         <Link href="/" className="flex items-center gap-2">
           <Icons.logo className="size-8 shrink-0 text-primary" />
