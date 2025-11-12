@@ -4,6 +4,7 @@ import type {
   DailyConsumption,
   HourlyConsumption,
   MonthlyConsumption,
+  YearlyConsumption,
 } from './types';
 import consumptionData from '../../data/dades_user1.json';
 
@@ -128,6 +129,25 @@ export const getMonthlyConsumptionForUser = () => {
             consumption: Math.round(monthlyTotals[key]),
         };
     });
+};
+
+export const getYearlyConsumption = (): YearlyConsumption[] => {
+  const yearlyTotals: { [key: number]: number } = {};
+
+  typedConsumptionData.forEach(record => {
+    if (record.CONSUMO_REAL === null) return;
+    const recordDate = new Date(record.FECHA_HORA);
+    const year = recordDate.getFullYear();
+    if (!yearlyTotals[year]) {
+      yearlyTotals[year] = 0;
+    }
+    yearlyTotals[year] += record.CONSUMO_REAL;
+  });
+
+  return Object.keys(yearlyTotals).map(year => ({
+    year: year.toString(),
+    consumption: Math.round(yearlyTotals[parseInt(year, 10)]),
+  }));
 };
 
 

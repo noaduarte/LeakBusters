@@ -1,7 +1,12 @@
 'use client';
 import { ConsumptionView } from '@/components/consumption/consumption-view';
 import { PageHeader } from '@/components/page-header';
-import { getHourlyConsumptionForDay, getDailyConsumptionForMonth, getMonthlyConsumptionForYear } from '@/lib/data';
+import { 
+  getHourlyConsumptionForDay, 
+  getDailyConsumptionForMonth, 
+  getMonthlyConsumptionForYear,
+  getYearlyConsumption
+} from '@/lib/data';
 import { LineChart } from 'lucide-react';
 import { useState, useMemo } from 'react';
 
@@ -9,12 +14,13 @@ export default function ConsumptionPage() {
   const today = new Date();
   const [selectedDate, setSelectedDate] = useState<Date>(today);
   const [selectedMonth, setSelectedMonth] = useState<number>(today.getMonth());
-  const [selectedYear, setSelectedYear] = useState<number>(today.getFullYear());
+  const [selectedYearForDaily, setSelectedYearForDaily] = useState<number>(today.getFullYear());
   const [selectedYearForMonthly, setSelectedYearForMonthly] = useState<number>(today.getFullYear());
 
   const hourlyData = useMemo(() => getHourlyConsumptionForDay(selectedDate), [selectedDate]);
-  const dailyData = useMemo(() => getDailyConsumptionForMonth(selectedYear, selectedMonth), [selectedYear, selectedMonth]);
+  const dailyData = useMemo(() => getDailyConsumptionForMonth(selectedYearForDaily, selectedMonth), [selectedYearForDaily, selectedMonth]);
   const monthlyData = useMemo(() => getMonthlyConsumptionForYear(selectedYearForMonthly), [selectedYearForMonthly]);
+  const yearlyData = useMemo(() => getYearlyConsumption(), []);
 
   const handleDateChange = (date: Date | undefined) => {
     if (date) {
@@ -27,7 +33,7 @@ export default function ConsumptionPage() {
   };
 
   const handleYearChangeForDaily = (year: string) => {
-    setSelectedYear(parseInt(year, 10));
+    setSelectedYearForDaily(parseInt(year, 10));
   };
   
   const handleYearChangeForMonthly = (year: string) => {
@@ -45,13 +51,14 @@ export default function ConsumptionPage() {
         hourlyData={hourlyData}
         dailyData={dailyData}
         monthlyData={monthlyData}
+        yearlyData={yearlyData}
         onDateChange={handleDateChange}
         onMonthChange={handleMonthChange}
         onYearChangeForDaily={handleYearChangeForDaily}
         onYearChangeForMonthly={handleYearChangeForMonthly}
         selectedDate={selectedDate}
         selectedMonth={selectedMonth}
-        selectedYear={selectedYear}
+        selectedYearForDaily={selectedYearForDaily}
         selectedYearForMonthly={selectedYearForMonthly}
       />
     </div>

@@ -14,7 +14,7 @@ export type MonthlyConsumption = {
 };
 
 export type YearlyConsumption = {
-  year: number;
+  year: string;
   consumption: number;
 };
 

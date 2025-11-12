@@ -32,6 +32,7 @@ import type {
   HourlyConsumption,
   DailyConsumption,
   MonthlyConsumption,
+  YearlyConsumption,
 } from '@/lib/types';
 import { ConsumptionDatePicker } from './consumption-date-picker';
 import {
@@ -54,13 +55,14 @@ type ConsumptionViewProps = {
   hourlyData: HourlyConsumption[];
   dailyData: DailyConsumption[];
   monthlyData: MonthlyConsumption[];
+  yearlyData: YearlyConsumption[];
   onDateChange: (date: Date | undefined) => void;
   onMonthChange: (month: string) => void;
   onYearChangeForDaily: (year: string) => void;
   onYearChangeForMonthly: (year: string) => void;
   selectedDate: Date;
   selectedMonth: number;
-  selectedYear: number;
+  selectedYearForDaily: number;
   selectedYearForMonthly: number;
 };
 
@@ -68,16 +70,17 @@ export function ConsumptionView({
   hourlyData,
   dailyData,
   monthlyData,
+  yearlyData,
   onDateChange,
   onMonthChange,
   onYearChangeForDaily,
   onYearChangeForMonthly,
   selectedDate,
   selectedMonth,
-  selectedYear,
+  selectedYearForDaily,
   selectedYearForMonthly,
 }: ConsumptionViewProps) {
-  const [activeTab, setActiveTab] = useState('daily');
+  const [activeTab, setActiveTab] = useState('horari');
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 10 }, (_, i) => (currentYear - i).toString());
   const months = [
@@ -104,21 +107,22 @@ export function ConsumptionView({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Tabs defaultValue="daily" onValueChange={setActiveTab} value={activeTab}>
+        <Tabs defaultValue="horari" onValueChange={setActiveTab} value={activeTab}>
           <div className="flex justify-between items-center flex-wrap gap-4">
-            <TabsList className="grid grid-cols-3 w-auto">
+            <TabsList className="grid grid-cols-4 w-auto">
+              <TabsTrigger value="horari">Horari</TabsTrigger>
               <TabsTrigger value="daily">Diari</TabsTrigger>
               <TabsTrigger value="monthly">Mensual</TabsTrigger>
               <TabsTrigger value="yearly">Anual</TabsTrigger>
             </TabsList>
             <div className="flex items-center gap-2">
-              {activeTab === 'daily' && (
+              {activeTab === 'horari' && (
                 <ConsumptionDatePicker
                   date={selectedDate}
                   onDateChange={onDateChange}
                 />
               )}
-              {activeTab === 'monthly' && (
+              {activeTab === 'daily' && (
                 <>
                   <Select value={selectedMonth.toString()} onValueChange={onMonthChange}>
                     <SelectTrigger className="w-[180px]">
@@ -130,7 +134,7 @@ export function ConsumptionView({
                       ))}
                     </SelectContent>
                   </Select>
-                   <Select value={selectedYear.toString()} onValueChange={onYearChangeForDaily}>
+                   <Select value={selectedYearForDaily.toString()} onValueChange={onYearChangeForDaily}>
                     <SelectTrigger className="w-[120px]">
                       <SelectValue placeholder="Any" />
                     </SelectTrigger>
@@ -142,7 +146,7 @@ export function ConsumptionView({
                   </Select>
                 </>
               )}
-              {activeTab === 'yearly' && (
+              {activeTab === 'monthly' && (
                  <Select value={selectedYearForMonthly.toString()} onValueChange={onYearChangeForMonthly}>
                     <SelectTrigger className="w-[180px]">
                       <SelectValue placeholder="Selecciona un any" />
@@ -156,7 +160,7 @@ export function ConsumptionView({
               )}
             </div>
           </div>
-          <TabsContent value="daily" className="mt-6">
+          <TabsContent value="horari" className="mt-6">
             <ChartContainer config={chartConfig} className="h-72 w-full">
               <LineChart
                 data={hourlyData}
@@ -182,7 +186,7 @@ export function ConsumptionView({
             </ChartContainer>
              <p className="text-center text-sm text-muted-foreground mt-4">Evolució del consum durant el dia seleccionat.</p>
           </TabsContent>
-          <TabsContent value="monthly" className="mt-6">
+          <TabsContent value="daily" className="mt-6">
             <ChartContainer config={chartConfig} className="h-72 w-full">
               <BarChart data={dailyData} accessibilityLayer>
                 <CartesianGrid vertical={false} />
@@ -200,7 +204,7 @@ export function ConsumptionView({
             </ChartContainer>
             <p className="text-center text-sm text-muted-foreground mt-4">Evolució del consum durant els dies del mes seleccionat.</p>
           </TabsContent>
-          <TabsContent value="yearly" className="mt-6">
+          <TabsContent value="monthly" className="mt-6">
              <ChartContainer config={chartConfig} className="h-72 w-full">
               <BarChart data={monthlyData} accessibilityLayer>
                 <CartesianGrid vertical={false} />
@@ -217,6 +221,24 @@ export function ConsumptionView({
               </BarChart>
             </ChartContainer>
             <p className="text-center text-sm text-muted-foreground mt-4">Evolució del consum durant els mesos de l'any seleccionat.</p>
+          </TabsContent>
+           <TabsContent value="yearly" className="mt-6">
+             <ChartContainer config={chartConfig} className="h-72 w-full">
+              <BarChart data={yearlyData} accessibilityLayer>
+                <CartesianGrid vertical={false} />
+                <XAxis dataKey="year" tickLine={false} axisLine={false} tickMargin={8} />
+                <YAxis tickFormatter={(value) => `${Math.round(value / 1000)}k L`} />
+                <Tooltip content={<ChartTooltipContent indicator="dot" />} />
+                <Legend />
+                <Bar
+                  dataKey="consumption"
+                  name="Consum"
+                  fill="var(--color-consumption)"
+                  radius={4}
+                />
+              </BarChart>
+            </ChartContainer>
+            <p className="text-center text-sm text-muted-foreground mt-4">Comparació del consum total entre anys.</p>
           </TabsContent>
         </Tabs>
       </CardContent>
