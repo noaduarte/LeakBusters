@@ -31,8 +31,8 @@ import { Settings } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 
 const formSchema = z.object({
-  databaseConnectionString: z.string().min(1, 'Connection string is required.'),
-  modelDataUri: z.string().min(1, 'Model Data URI is required.').url('Must be a valid data URI.'),
+  databaseConnectionString: z.string().min(1, 'La cadena de connexió és requerida.'),
+  modelDataUri: z.string().min(1, 'El Data URI del model és requerit.').url('Ha de ser un Data URI vàlid.'),
 });
 
 export default function SettingsPage() {
@@ -51,25 +51,25 @@ export default function SettingsPage() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     setSettings(values);
     toast({
-      title: 'Settings Saved',
-      description: 'Your changes have been saved successfully.',
+      title: 'Configuració Guardada',
+      description: 'Els teus canvis s\'han guardat correctament.',
     });
   }
 
   return (
     <div className="flex flex-col gap-8">
       <PageHeader
-        title="Settings"
-        description="Configure your external data sources and prediction models."
+        title="Configuració"
+        description="Configura les teves fonts de dades externes i models de predicció."
         icon={<Settings />}
       />
       <Card>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <CardHeader>
-              <CardTitle>Data Integration</CardTitle>
+              <CardTitle>Integració de Dades</CardTitle>
               <CardDescription>
-                Connect your water consumption database and leak prediction model.
+                Connecta la teva base de dades de consum d'aigua i el model de predicció de fuites.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -78,15 +78,15 @@ export default function SettingsPage() {
                 name="databaseConnectionString"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Database Connection String</FormLabel>
+                    <FormLabel>Cadena de Connexió de la Base de Dades</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="e.g., postgresql://user:password@host:port/database"
+                        placeholder="p. ex., postgresql://usuari:contrasenya@host:port/base_de_dades"
                         {...field}
                       />
                     </FormControl>
                     <FormDescription>
-                      The connection string for your water consumption database.
+                      La cadena de connexió per a la teva base de dades de consum d'aigua.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -97,7 +97,7 @@ export default function SettingsPage() {
                 name="modelDataUri"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Leak Prediction Model</FormLabel>
+                    <FormLabel>Model de Predicció de Fuites</FormLabel>
                     <FormControl>
                       <Textarea
                         placeholder="data:application/octet-stream;base64,..."
@@ -106,7 +106,7 @@ export default function SettingsPage() {
                       />
                     </FormControl>
                     <FormDescription>
-                      The data URI for your trained machine learning model.
+                      El Data URI per al teu model d'aprenentatge automàtic entrenat.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -114,7 +114,7 @@ export default function SettingsPage() {
               />
             </CardContent>
             <CardFooter>
-              <Button type="submit">Save Settings</Button>
+              <Button type="submit">Guardar Configuració</Button>
             </CardFooter>
           </form>
         </Form>

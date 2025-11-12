@@ -7,8 +7,8 @@ export default function ConsumptionPage() {
   return (
     <div className="flex flex-col gap-8">
       <PageHeader
-        title="Consumption Analysis"
-        description="Analyze your water usage patterns across different timeframes."
+        title="Anàlisi de Consum"
+        description="Analitza els teus patrons de consum d'aigua en diferents períodes de temps."
         icon={<LineChart />}
       />
       <ConsumptionView

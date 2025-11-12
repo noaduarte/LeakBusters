@@ -33,7 +33,7 @@ export function LeakPrediction() {
 
     if (!settings.databaseConnectionString || !settings.modelDataUri) {
       setError(
-        'Please provide a database connection string and a model data URI in the settings page before predicting leaks.'
+        'Si us plau, proporcioneu una cadena de connexió a la base de dades i un URI de dades del model a la pàgina de configuració abans de predir fuites.'
       );
       return;
     }
@@ -58,10 +58,10 @@ export function LeakPrediction() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2 font-headline">
           <AlertTriangle className="size-6 text-destructive" />
-          Leak Risk Prediction
+          Predicció de Risc de Fuites
         </CardTitle>
         <CardDescription>
-          Use AI to analyze your consumption and predict potential leaks.
+          Utilitza IA per analitzar el teu consum i predir possibles fuites.
         </CardDescription>
       </CardHeader>
       <CardContent className="flex-grow">
@@ -79,19 +79,19 @@ export function LeakPrediction() {
         ) : result ? (
            <Alert>
             <Bot className="h-4 w-4" />
-            <AlertTitle>AI Assessment</AlertTitle>
+            <AlertTitle>Avaluació d'IA</AlertTitle>
             <AlertDescription>{result}</AlertDescription>
           </Alert>
         ) : (
           <div className="text-center text-muted-foreground p-4 bg-muted/50 rounded-lg flex flex-col items-center justify-center h-full">
             <ShieldCheck className="size-10 mb-2 text-primary" />
-            <p>Your system seems to be running smoothly. Click below to run a new analysis.</p>
+            <p>El teu sistema sembla funcionar correctament. Fes clic a continuació per executar una nova anàlisi.</p>
           </div>
         )}
       </CardContent>
       <CardFooter>
         <Button onClick={handlePredictLeak} disabled={isPending} className="w-full">
-          {isPending ? 'Analyzing...' : 'Check for Leaks'}
+          {isPending ? 'Analitzant...' : 'Comprovar si hi ha Fuites'}
         </Button>
       </CardFooter>
     </Card>

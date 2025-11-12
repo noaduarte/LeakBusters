@@ -2,7 +2,7 @@
   "placeholderImages": [
     {
       "id": "logo",
-      "description": "AquaGuard app logo",
+      "description": "AB Data Challenge app logo",
       "imageUrl": "https://images.unsplash.com/flagged/photo-1568196978341-fd5e4d1253ed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx3YXRlciUyMGRyb3B8ZW58MHx8fHwxNzYyODkxNjAyfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "water drop"
     },

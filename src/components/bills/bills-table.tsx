@@ -37,22 +37,35 @@ export function BillsTable({ data }: BillsTableProps) {
     }
   };
 
+  const translateStatus = (status: Bill['status']) => {
+    switch (status) {
+      case 'Paid':
+        return 'Pagat';
+      case 'Due':
+        return 'Pendent';
+      case 'Overdue':
+        return 'Vençut';
+      default:
+        return status;
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Billing History</CardTitle>
-        <CardDescription>A record of your monthly water bills.</CardDescription>
+        <CardTitle>Historial de Facturació</CardTitle>
+        <CardDescription>Un registre de les teves factures mensuals d'aigua.</CardDescription>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Bill ID</TableHead>
-              <TableHead>Month</TableHead>
-              <TableHead>Amount</TableHead>
-              <TableHead>Due Date</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-right">Action</TableHead>
+              <TableHead>ID Factura</TableHead>
+              <TableHead>Mes</TableHead>
+              <TableHead>Import</TableHead>
+              <TableHead>Data de Venciment</TableHead>
+              <TableHead>Estat</TableHead>
+              <TableHead className="text-right">Acció</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -64,12 +77,12 @@ export function BillsTable({ data }: BillsTableProps) {
                 <TableCell>{new Date(bill.dueDate).toLocaleDateString()}</TableCell>
                 <TableCell>
                   <Badge variant={getStatusVariant(bill.status)} className={cn(getStatusVariant(bill.status) === 'default' && 'bg-accent text-accent-foreground')}>
-                    {bill.status}
+                    {translateStatus(bill.status)}
                   </Badge>
                 </TableCell>
                 <TableCell className="text-right">
                   <Button variant="ghost" size="icon" asChild>
-                    <a href={bill.statementUrl} aria-label={`Download statement for ${bill.month}`}>
+                    <a href={bill.statementUrl} aria-label={`Descarregar extracte per a ${bill.month}`}>
                       <Download className="size-4" />
                     </a>
                   </Button>

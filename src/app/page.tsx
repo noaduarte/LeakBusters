@@ -1,5 +1,3 @@
-import { MonthlyConsumptionChart } from '@/components/dashboard/monthly-consumption-chart';
-import { LeakPrediction } from '@/components/dashboard/leak-prediction';
 import { StatCard } from '@/components/dashboard/stat-card';
 import { PageHeader } from '@/components/page-header';
 import {
@@ -9,41 +7,44 @@ import {
   Lightbulb,
   Settings,
 } from 'lucide-react';
+import { MonthlyConsumptionChart } from '@/components/dashboard/monthly-consumption-chart';
+import { LeakPrediction } from '@/components/dashboard/leak-prediction';
 import { monthlyConsumption } from '@/lib/data';
+
 
 export default function Home() {
   const quickLinks = [
     {
-      title: 'Consumption Details',
+      title: 'Detalls de Consum',
       href: '/consumption',
       icon: <LineChart className="size-6 text-primary" />,
-      description: 'View daily, monthly, and annual usage graphs.',
+      description: 'Consulta gràfics de consum diari, mensual i anual.',
     },
     {
-      title: 'Recommendations',
+      title: 'Recomanacions',
       href: '/recommendations',
       icon: <Lightbulb className="size-6 text-primary" />,
-      description: 'Get tips to reduce your water consumption.',
+      description: 'Obtén consells per reduir el teu consum d\'aigua.',
     },
     {
-      title: 'Billing History',
+      title: 'Historial de Factures',
       href: '/bills',
       icon: <FileText className="size-6 text-primary" />,
-      description: 'Access your past and current monthly bills.',
+      description: 'Accedeix a les teves factures mensuals passades i actuals.',
     },
     {
-      title: 'Settings',
+      title: 'Configuració',
       href: '/settings',
       icon: <Settings className="size-6 text-primary" />,
-      description: 'Configure your data sources and prediction models.',
+      description: 'Configura les teves fonts de dades i models de predicció.',
     },
   ];
 
   return (
     <div className="flex flex-col gap-8">
       <PageHeader
-        title="Dashboard"
-        description="Here's an overview of your water consumption."
+        title="Inici"
+        description="Aquí tens un resum del teu consum d'aigua."
         icon={<LayoutDashboard />}
       />
 

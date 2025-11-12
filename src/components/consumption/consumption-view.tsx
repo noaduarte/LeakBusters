@@ -34,7 +34,7 @@ import type {
 
 const chartConfig = {
   consumption: {
-    label: 'Consumption',
+    label: 'Consum',
     color: 'hsl(var(--primary))',
   },
 };
@@ -53,17 +53,17 @@ export function ConsumptionView({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Consumption Graphs</CardTitle>
+        <CardTitle>Gràfics de Consum</CardTitle>
         <CardDescription>
-          Click through the tabs to see your consumption data.
+          Fes clic a les pestanyes per veure les teves dades de consum.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="monthly">
           <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="daily">Daily</TabsTrigger>
-            <TabsTrigger value="monthly">Monthly</TabsTrigger>
-            <TabsTrigger value="yearly">Yearly</TabsTrigger>
+            <TabsTrigger value="daily">Diari</TabsTrigger>
+            <TabsTrigger value="monthly">Mensual</TabsTrigger>
+            <TabsTrigger value="yearly">Anual</TabsTrigger>
           </TabsList>
           <TabsContent value="daily" className="mt-6">
             <ChartContainer config={chartConfig} className="h-72 w-full">

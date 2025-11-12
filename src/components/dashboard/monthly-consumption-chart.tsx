@@ -23,7 +23,7 @@ import { TrendingUp } from 'lucide-react';
 
 const chartConfig = {
   consumption: {
-    label: 'Consumption (Gallons)',
+    label: 'Consum (Galons)',
     color: 'hsl(var(--primary))',
   },
 };
@@ -38,10 +38,10 @@ export function MonthlyConsumptionChart({ data }: MonthlyConsumptionChartProps) 
       <CardHeader>
         <CardTitle className="flex items-center gap-2 font-headline">
           <TrendingUp className="size-6"/>
-          Monthly Consumption
+          Consum Mensual
         </CardTitle>
         <CardDescription>
-          Your water usage over the past 12 months.
+          El teu consum d'aigua durant els últims 12 mesos.
         </CardDescription>
       </CardHeader>
       <CardContent>

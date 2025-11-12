@@ -7,8 +7,8 @@ export default function BillsPage() {
   return (
     <div className="flex flex-col gap-8">
       <PageHeader
-        title="Billing & Statements"
-        description="View your billing history and download past statements."
+        title="Facturació i Extractes"
+        description="Consulta el teu historial de facturació i descarrega extractes anteriors."
         icon={<FileText />}
       />
       <BillsTable data={bills} />

@@ -26,15 +26,15 @@ import {
 import { Input } from '@/components/ui/input';
 import { getRecommendationsAction } from '@/app/actions';
 import { PageHeader } from '@/components/page-header';
-import { Bot, Lightbulb, ListChecks, TrendingDown, TrendingUp } from 'lucide-react';
+import { Bot, Lightbulb, ListChecks, TrendingDown, TrendingUp, AlertTriangle } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 const formSchema = z.object({
-  dailyConsumption: z.coerce.number().min(1, 'Must be greater than 0'),
-  monthlyConsumption: z.coerce.number().min(1, 'Must be greater than 0'),
-  location: z.string().min(2, 'Location is required'),
-  householdSize: z.coerce.number().int().min(1, 'Must be at least 1'),
+  dailyConsumption: z.coerce.number().min(1, 'Ha de ser superior a 0'),
+  monthlyConsumption: z.coerce.number().min(1, 'Ha de ser superior a 0'),
+  location: z.string().min(2, 'La ubicació és requerida'),
+  householdSize: z.coerce.number().int().min(1, 'Ha de ser com a mínim 1'),
 });
 
 export default function RecommendationsPage() {
@@ -69,17 +69,17 @@ export default function RecommendationsPage() {
   return (
     <div className="flex flex-col gap-8">
       <PageHeader
-        title="Consumption Recommendations"
-        description="Get personalized AI-powered recommendations to reduce your water usage."
+        title="Recomanacions de Consum"
+        description="Obté recomanacions personalitzades amb IA per reduir el teu consum d'aigua."
         icon={<Lightbulb />}
       />
       <div className="grid lg:grid-cols-3 gap-8">
         <div className="lg:col-span-1">
           <Card>
             <CardHeader>
-              <CardTitle>Your Information</CardTitle>
+              <CardTitle>La teva Informació</CardTitle>
               <CardDescription>
-                Provide your details to get tailored advice.
+                Proporciona les teves dades per obtenir consells a mida.
               </CardDescription>
             </CardHeader>
             <Form {...form}>
@@ -90,7 +90,7 @@ export default function RecommendationsPage() {
                     name="dailyConsumption"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Avg. Daily Consumption (gal)</FormLabel>
+                        <FormLabel>Consum Diari Mitjà (gal)</FormLabel>
                         <FormControl>
                           <Input type="number" placeholder="120" {...field} />
                         </FormControl>
@@ -103,7 +103,7 @@ export default function RecommendationsPage() {
                     name="monthlyConsumption"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Avg. Monthly Consumption (gal)</FormLabel>
+                        <FormLabel>Consum Mensual Mitjà (gal)</FormLabel>
                         <FormControl>
                           <Input type="number" placeholder="3600" {...field} />
                         </FormControl>
@@ -116,7 +116,7 @@ export default function RecommendationsPage() {
                     name="location"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Location (City, State)</FormLabel>
+                        <FormLabel>Ubicació (Ciutat, Estat)</FormLabel>
                         <FormControl>
                           <Input placeholder="Austin, TX" {...field} />
                         </FormControl>
@@ -129,7 +129,7 @@ export default function RecommendationsPage() {
                     name="householdSize"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Household Size</FormLabel>
+                        <FormLabel>Mida de la Llar</FormLabel>
                         <FormControl>
                           <Input type="number" placeholder="2" {...field} />
                         </FormControl>
@@ -140,7 +140,7 @@ export default function RecommendationsPage() {
                 </CardContent>
                 <CardFooter>
                   <Button type="submit" className="w-full" disabled={isPending}>
-                    {isPending ? 'Generating...' : 'Get Recommendations'}
+                    {isPending ? 'Generant...' : 'Obtenir Recomanacions'}
                   </Button>
                 </CardFooter>
               </form>
@@ -151,8 +151,8 @@ export default function RecommendationsPage() {
         <div className="lg:col-span-2">
             <Card className="h-full">
                  <CardHeader>
-                    <CardTitle className='flex items-center gap-2'><Bot className='size-6' /> AI-Powered Insights</CardTitle>
-                    <CardDescription>Here are your personalized results.</CardDescription>
+                    <CardTitle className='flex items-center gap-2'><Bot className='size-6' /> Anàlisis amb IA</CardTitle>
+                    <CardDescription>Aquí tens els teus resultats personalitzats.</CardDescription>
                 </CardHeader>
                 <CardContent>
                 {isPending ? (
@@ -170,13 +170,13 @@ export default function RecommendationsPage() {
                     <div className="space-y-6">
                         <div className="p-4 bg-muted/50 rounded-lg">
                              <h3 className="font-semibold text-lg flex items-center gap-2 mb-2">
-                                {result.comparisonToAverage.includes('below') || result.comparisonToAverage.includes('lower') ? <TrendingDown className='text-accent' /> : <TrendingUp className='text-destructive' />}
-                                Consumption Comparison
+                                {result.comparisonToAverage.includes('below') || result.comparisonToAverage.includes('lower') || result.comparisonToAverage.includes('sota') ? <TrendingDown className='text-accent' /> : <TrendingUp className='text-destructive' />}
+                                Comparació de Consum
                             </h3>
                             <p className='text-muted-foreground'>{result.comparisonToAverage}</p>
                         </div>
                          <div className="p-4 bg-muted/50 rounded-lg">
-                             <h3 className="font-semibold text-lg flex items-center gap-2 mb-2"><ListChecks className='text-primary'/> Recommended Actions</h3>
+                             <h3 className="font-semibold text-lg flex items-center gap-2 mb-2"><ListChecks className='text-primary'/> Accions Recomanades</h3>
                             <ul className='space-y-2 list-disc pl-5 text-muted-foreground'>
                                 {result.recommendations.map((rec, index) => <li key={index}>{rec}</li>)}
                             </ul>
@@ -184,7 +184,7 @@ export default function RecommendationsPage() {
                     </div>
                 ) : (
                     <div className="text-center text-muted-foreground p-8 flex flex-col items-center justify-center h-full bg-muted/50 rounded-lg">
-                        <p>Your recommendations will appear here.</p>
+                        <p>Les teves recomanacions apareixeran aquí.</p>
                     </div>
                 )}
                 </CardContent>
