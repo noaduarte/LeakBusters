@@ -17,7 +17,7 @@ export function PageHeader({
   return (
     <div className={cn('flex items-start gap-4', className)}>
       {icon && (
-        <div className="hidden sm:flex items-center justify-center p-3 rounded-lg bg-card border">
+        <div className="hidden sm:flex items-center justify-center p-3 rounded-lg bg-card border text-primary">
           {icon}
         </div>
       )}

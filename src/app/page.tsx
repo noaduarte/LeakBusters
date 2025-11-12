@@ -9,6 +9,7 @@ import {
 import { MonthlyConsumptionChart } from '@/components/dashboard/monthly-consumption-chart';
 import { LeakPrediction } from '@/components/dashboard/leak-prediction';
 import { getMonthlyConsumptionForUser } from '@/lib/data';
+import { Icons } from '@/components/icons';
 
 export default function Home() {
   const quickLinks = [
@@ -37,11 +38,16 @@ export default function Home() {
 
   return (
     <div className="flex flex-col gap-8">
-      <PageHeader
-        title="Inici"
-        description="Aquí tens un resum del teu consum d'aigua."
-        icon={<LayoutDashboard />}
-      />
+      <div className="flex items-center gap-4">
+         <Icons.logo className="size-12 shrink-0 text-primary hidden sm:block" />
+         <div>
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-primary-foreground font-headline">
+              AB Data Challenge
+            </h1>
+            <p className="mt-1 text-muted-foreground">Aquí tens un resum del teu consum d'aigua.</p>
+         </div>
+      </div>
+
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <div className="lg:col-span-2">

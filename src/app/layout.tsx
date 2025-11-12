@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
-import { AppHeader } from '@/components/layout/app-header';
+import { AppSidebar } from '@/components/layout/app-sidebar';
 
 export const metadata: Metadata = {
   title: 'AB Data Challenge',
@@ -24,9 +24,9 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased">
-        <div className="flex flex-col min-h-screen">
-          <AppHeader />
-          <main className="flex-grow p-4 sm:p-6 lg:p-8 pt-16">{children}</main>
+        <div className="flex min-h-screen">
+          <AppSidebar />
+          <main className="flex-grow p-4 sm:p-6 lg:p-8">{children}</main>
           <Toaster />
         </div>
       </body>
