@@ -2,7 +2,7 @@ import type {
   Bill,
   ConsumptionRecord,
 } from './types';
-import consumptionData from './data/dataset_cliente.json' with { type: 'json' };
+import consumptionData from './data/dades_sensefuites_ambconsums.json' with { type: 'json' };
 
 // Type assertion for the imported JSON data
 const typedConsumptionData: ConsumptionRecord[] = consumptionData as ConsumptionRecord[];
