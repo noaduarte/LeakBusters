@@ -1,16 +1,13 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { Home, LineChart, Users, FileText } from 'lucide-react';
 import {
-  Home,
-  LineChart,
-  Users,
-  FileText,
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from 'lucide-react';
+} from '@/components/ui/tooltip';
 import { Icons } from '@/components/icons';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
