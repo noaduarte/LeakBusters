@@ -13,19 +13,19 @@ export default function DashboardPage() {
   const quickLinks = [
     {
       title: 'Detalls de Consum',
-      href: '/consumption',
+      href: '/dashboard/consumption',
       icon: <LineChart className="size-6 text-primary" />,
       description: 'Consulta gràfics de consum diari, mensual i anual.',
     },
     {
       title: 'Conscienciació',
-      href: '/awareness',
+      href: '/dashboard/awareness',
       icon: <Users className="size-6 text-primary" />,
       description: "Compara el teu consum d'aigua amb la mitjana.",
     },
     {
       title: 'Historial de Factures',
-      href: '/bills',
+      href: '/dashboard/bills',
       icon: <FileText className="size-6 text-primary" />,
       description: 'Accedeix a les teves factures mensuals passades i actuals.',
     },

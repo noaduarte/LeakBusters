@@ -15,9 +15,9 @@ import { useRouter } from 'next/navigation';
 
 const navItems = [
   { href: '/dashboard', icon: Home, label: 'Inici' },
-  { href: '/consumption', icon: LineChart, label: 'Consum' },
-  { href: '/awareness', icon: Users, label: 'Conscienciació' },
-  { href: '/bills', icon: FileText, label: 'Factures' },
+  { href: '/dashboard/consumption', icon: LineChart, label: 'Consum' },
+  { href: '/dashboard/awareness', icon: Users, label: 'Conscienciació' },
+  { href: '/dashboard/bills', icon: FileText, label: 'Factures' },
 ];
 
 export function AppSidebar() {
