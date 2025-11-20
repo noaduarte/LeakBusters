@@ -12,6 +12,8 @@ import { Icons } from '@/components/icons';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
+import { useLocalStorage } from '@/hooks/use-local-storage';
+
 
 const navItems = [
   { href: '/dashboard', icon: Home, label: 'Inici' },
@@ -23,8 +25,11 @@ const navItems = [
 export function AppSidebar() {
   const pathname = usePathname();
   const router = useRouter();
+  const [_, setUsername] = useLocalStorage('username', '');
+
 
   const handleLogout = () => {
+    setUsername('');
     router.push('/');
   };
 
@@ -61,7 +66,7 @@ export function AppSidebar() {
             ))}
              <Tooltip>
               <TooltipTrigger asChild>
-                <Button onClick={handleLogout} variant="ghost" size="icon" className="rounded-lg mt-4">
+                <Button onClick={handleLogout} variant="ghost" size="icon" className="rounded-lg">
                   <LogOut className="size-5" />
                   <span className="sr-only">Tancar sessió</span>
                 </Button>

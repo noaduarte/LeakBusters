@@ -1,3 +1,5 @@
+'use client';
+
 import { StatCard } from '@/components/dashboard/stat-card';
 import {
   FileText,
@@ -8,6 +10,8 @@ import { MonthlyConsumptionChart } from '@/components/dashboard/monthly-consumpt
 import { LeakPrediction } from '@/components/dashboard/leak-prediction';
 import { getMonthlyConsumptionForUser } from '@/lib/data';
 import { Icons } from '@/components/icons';
+import { useLocalStorage } from '@/hooks/use-local-storage';
+import { useEffect, useState } from 'react';
 
 export default function DashboardPage() {
   const quickLinks = [
@@ -32,6 +36,16 @@ export default function DashboardPage() {
   ];
 
   const monthlyConsumption = getMonthlyConsumptionForUser();
+  const [username] = useLocalStorage('username', '');
+  const [greeting, setGreeting] = useState('');
+
+  useEffect(() => {
+    if (username) {
+      setGreeting(`Benvingut, ${username}!`);
+    } else {
+      setGreeting('Benvingut!');
+    }
+  }, [username]);
 
   return (
     <div className="flex flex-col gap-8">
@@ -39,7 +53,7 @@ export default function DashboardPage() {
          <Icons.logo className="size-12 shrink-0 text-primary hidden sm:block" />
          <div>
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-primary-foreground font-headline">
-              AB Data Challenge
+              {greeting}
             </h1>
             <p className="mt-1 text-muted-foreground">Aquí tens un resum del teu consum d'aigua.</p>
          </div>

@@ -7,15 +7,17 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Icons } from '@/components/icons';
+import { useLocalStorage } from '@/hooks/use-local-storage';
 
 export default function LoginPage() {
   const router = useRouter();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [_, setStoredUsername] = useLocalStorage('username', '');
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // For now, any login attempt is successful
+    setStoredUsername(username);
     router.push('/dashboard');
   };
 
