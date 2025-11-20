@@ -12,17 +12,10 @@ import {
 } from '@/components/ui/card';
 import { AlertTriangle, ShieldCheck, Bot } from 'lucide-react';
 import { predictLeakAction } from '@/app/actions';
-import { useLocalStorage } from '@/hooks/use-local-storage';
-import type { AppSettings } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 export function LeakPrediction() {
-  const [settings] = useLocalStorage<AppSettings>('app-settings', {
-    databaseConnectionString: '',
-    modelDataUri: '',
-  });
-
   const [isPending, startTransition] = useTransition();
   const [result, setResult] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -30,18 +23,10 @@ export function LeakPrediction() {
   const handlePredictLeak = () => {
     setError(null);
     setResult(null);
-
-    if (!settings.databaseConnectionString || !settings.modelDataUri) {
-      setError(
-        'Si us plau, proporcioneu una cadena de connexió a la base de dades i un URI de dades del model a la pàgina de configuració abans de predir fuites.'
-      );
-      return;
-    }
-
     startTransition(async () => {
       const { data, error } = await predictLeakAction({
-        databaseConnectionString: settings.databaseConnectionString,
-        modelDataUri: settings.modelDataUri,
+        consumptionDataFile: 'dades_user1.json',
+        modelFile: 'model_fuites.keras',
       });
 
       if (error) {

@@ -27,11 +27,6 @@ export type Bill = {
   statementUrl: string;
 };
 
-export type AppSettings = {
-  databaseConnectionString: string;
-  modelDataUri: string;
-};
-
 export type ConsumptionRecord = {
   FECHA_HORA: number;
   CONSUMO_REAL: number | null;

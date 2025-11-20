@@ -23,13 +23,7 @@ export async function getRecommendationsAction(
 
 export async function predictLeakAction(input: PredictFutureLeaksInput) {
   try {
-    // In a real application, you would validate the inputs here.
-    // For this example, we're providing placeholder values if inputs are empty.
-    const mockInput = {
-        databaseConnectionString: input.databaseConnectionString || "mock-db-connection",
-        modelDataUri: input.modelDataUri || "data:application/octet-stream;base64,mock-model-data",
-    }
-    const data = await predictFutureLeaks(mockInput);
+    const data = await predictFutureLeaks(input);
     return { data, error: null };
   } catch (e: any) {
     console.error(e);

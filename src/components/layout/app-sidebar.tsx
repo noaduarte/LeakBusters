@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, LineChart, Users, FileText, LogOut, Settings } from 'lucide-react';
+import { Home, LineChart, Users, FileText, LogOut } from 'lucide-react';
 import {
   Tooltip,
   TooltipContent,
@@ -64,25 +64,6 @@ export function AppSidebar() {
                 <TooltipContent side="right">{item.label}</TooltipContent>
               </Tooltip>
             ))}
-             <Tooltip>
-                <TooltipTrigger asChild>
-                    <Button
-                    asChild
-                    variant={pathname === '/dashboard/settings' ? 'secondary' : 'ghost'}
-                    size="icon"
-                    className={cn(
-                        'rounded-lg',
-                        pathname === '/dashboard/settings' && 'text-primary'
-                    )}
-                    >
-                    <Link href="/dashboard/settings">
-                        <Settings className="size-5" />
-                        <span className="sr-only">Configuració</span>
-                    </Link>
-                    </Button>
-                </TooltipTrigger>
-                <TooltipContent side="right">Configuració</TooltipContent>
-            </Tooltip>
              <Tooltip>
               <TooltipTrigger asChild>
                 <Button onClick={handleLogout} variant="ghost" size="icon" className="rounded-lg">
