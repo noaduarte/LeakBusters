@@ -55,7 +55,7 @@ export function MonthlyConsumptionChart({ data }: MonthlyConsumptionChartProps) 
               axisLine={false}
             />
             <YAxis
-              tickFormatter={(value) => `${value / 1000}k`}
+              tickFormatter={(value) => `${Math.round(value / 1000)}k`}
             />
             <Tooltip
               cursor={false}

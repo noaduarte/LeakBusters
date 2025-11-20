@@ -7,8 +7,13 @@ import type {
   YearlyConsumption,
 } from './types';
 import consumptionData from '../../data/dades_user1.json';
+import dailyAvgData from '../../data/daily_avg.json';
+import monthlyAvgData from '../../data/monthly_avg.json';
 
 const typedConsumptionData: ConsumptionRecord[] = consumptionData as ConsumptionRecord[];
+const typedDailyAvgData: { FECHA: string; CONSUMO_REAL: number }[] = dailyAvgData;
+const typedMonthlyAvgData: { MES: string; CONSUMO_REAL: number }[] = monthlyAvgData;
+
 
 const getHourlyData = (day: Date): HourlyConsumption[] => {
   const hourlyConsumption: { [key: number]: number } = {};
@@ -113,6 +118,8 @@ export const getMonthlyConsumptionForUser = () => {
         const date = new Date(record.FECHA_HORA);
         const month = date.getMonth();
         const year = date.getFullYear();
+        // We only care about 2024 for this chart
+        if (year !== 2024) return;
         const key = `${year}-${month.toString().padStart(2, '0')}`;
         if (!monthlyTotals[key]) {
             monthlyTotals[key] = 0;
@@ -120,7 +127,7 @@ export const getMonthlyConsumptionForUser = () => {
         monthlyTotals[key] += record.CONSUMO_REAL;
     });
 
-    const sortedMonths = Object.keys(monthlyTotals).sort().slice(-12);
+    const sortedMonths = Object.keys(monthlyTotals).sort();
 
     return sortedMonths.map(key => {
         const [year, monthIndex] = key.split('-');
@@ -152,13 +159,17 @@ export const getYearlyConsumption = (): YearlyConsumption[] => {
 
 
 export const getAverageMonthlyConsumption = () => {
-    // This is now a placeholder as we only have one user's data.
-    // In a real scenario, you'd calculate this across all users.
-    // For now, we'll create a slightly altered version of the user's data.
-    const baseData = getMonthlyConsumptionForUser();
-    return baseData.map(d => ({
-        ...d,
-        consumption: Math.round(d.consumption * (Math.random() * 0.4 + 0.8)) // +/- 20% variation
+    const monthNames = ["Gen", "Feb", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Des"];
+    return typedMonthlyAvgData.filter(d => d.MES.startsWith('2024')).map(d => ({
+        month: monthNames[new Date(d.MES).getMonth()],
+        consumption: Math.round(d.CONSUMO_REAL),
+    }));
+}
+
+export const getAverageDailyConsumption = () => {
+    return typedDailyAvgData.map(d => ({
+        date: d.FECHA,
+        consumption: d.CONSUMO_REAL,
     }));
 }
 
