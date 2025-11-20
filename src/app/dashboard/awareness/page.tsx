@@ -53,7 +53,7 @@ const chartConfig = {
 export default function AwarenessPage() {
   const [activeTab, setActiveTab] = useState('monthly');
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [selectedYear, setSelectedYear] = useState(2024);
 
   const userMonthlyConsumption = useMemo(() => getMonthlyConsumptionForYear(selectedYear), [selectedYear]);
   const averageMonthlyConsumption = useMemo(() => getAverageMonthlyConsumption(), []);
@@ -113,8 +113,7 @@ export default function AwarenessPage() {
     { value: '10', label: 'Novembre' },
     { value: '11', label: 'Desembre' },
   ];
-  const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 10 }, (_, i) => (currentYear - i).toString());
+  const years = ['2024'];
 
   return (
     <div className="flex flex-col gap-8">
