@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, LineChart, Users, FileText, LogOut } from 'lucide-react';
+import { Home, LineChart, Users, FileText, LogOut, Settings } from 'lucide-react';
 import {
   Tooltip,
   TooltipContent,
@@ -29,7 +29,7 @@ export function AppSidebar() {
   };
 
   return (
-    <aside className="flex flex-col items-center justify-between gap-y-6 border-r bg-background p-3">
+    <aside className="flex flex-col items-center border-r bg-background p-3">
       <div className="flex flex-col items-center gap-y-6">
         <Link href="/dashboard">
           <Icons.logo className="size-8 text-primary" />
@@ -59,20 +59,18 @@ export function AppSidebar() {
                 <TooltipContent side="right">{item.label}</TooltipContent>
               </Tooltip>
             ))}
+             <Tooltip>
+              <TooltipTrigger asChild>
+                <Button onClick={handleLogout} variant="ghost" size="icon" className="rounded-lg mt-4">
+                  <LogOut className="size-5" />
+                  <span className="sr-only">Tancar sessió</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="right">Tancar sessió</TooltipContent>
+            </Tooltip>
           </nav>
         </TooltipProvider>
       </div>
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button onClick={handleLogout} variant="ghost" size="icon" className="rounded-lg">
-              <LogOut className="size-5" />
-              <span className="sr-only">Tancar sessió</span>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent side="right">Tancar sessió</TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
     </aside>
   );
 }
