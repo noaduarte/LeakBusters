@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, LineChart, Users, FileText } from 'lucide-react';
+import { Home, LineChart, Users, FileText, LogOut } from 'lucide-react';
 import {
   Tooltip,
   TooltipContent,
@@ -11,9 +11,10 @@ import {
 import { Icons } from '@/components/icons';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
 
 const navItems = [
-  { href: '/', icon: Home, label: 'Inici' },
+  { href: '/dashboard', icon: Home, label: 'Inici' },
   { href: '/consumption', icon: LineChart, label: 'Consum' },
   { href: '/awareness', icon: Users, label: 'Conscienciació' },
   { href: '/bills', icon: FileText, label: 'Factures' },
@@ -21,38 +22,56 @@ const navItems = [
 
 export function AppSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    router.push('/');
+  };
 
   return (
-    <aside className="flex flex-col items-center gap-y-6 border-r bg-background p-3">
-      <Link href="/">
-        <Icons.logo className="size-8 text-primary" />
-        <span className="sr-only">AB Data Challenge</span>
-      </Link>
+    <aside className="flex flex-col items-center justify-between gap-y-6 border-r bg-background p-3">
+      <div className="flex flex-col items-center gap-y-6">
+        <Link href="/dashboard">
+          <Icons.logo className="size-8 text-primary" />
+          <span className="sr-only">AB Data Challenge</span>
+        </Link>
+        <TooltipProvider>
+          <nav className="flex flex-col items-center gap-y-4">
+            {navItems.map((item) => (
+              <Tooltip key={item.href}>
+                <TooltipTrigger asChild>
+                  <Button
+                    asChild
+                    variant={pathname === item.href ? 'secondary' : 'ghost'}
+                    size="icon"
+                    className={cn(
+                      'rounded-lg',
+                      pathname === item.href &&
+                        'text-primary'
+                    )}
+                  >
+                    <Link href={item.href}>
+                      <item.icon className="size-5" />
+                      <span className="sr-only">{item.label}</span>
+                    </Link>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="right">{item.label}</TooltipContent>
+              </Tooltip>
+            ))}
+          </nav>
+        </TooltipProvider>
+      </div>
       <TooltipProvider>
-        <nav className="flex flex-col items-center gap-y-4">
-          {navItems.map((item) => (
-            <Tooltip key={item.href}>
-              <TooltipTrigger asChild>
-                <Button
-                  asChild
-                  variant={pathname === item.href ? 'secondary' : 'ghost'}
-                  size="icon"
-                  className={cn(
-                    'rounded-lg',
-                    pathname === item.href &&
-                      'text-primary'
-                  )}
-                >
-                  <Link href={item.href}>
-                    <item.icon className="size-5" />
-                    <span className="sr-only">{item.label}</span>
-                  </Link>
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="right">{item.label}</TooltipContent>
-            </Tooltip>
-          ))}
-        </nav>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button onClick={handleLogout} variant="ghost" size="icon" className="rounded-lg">
+              <LogOut className="size-5" />
+              <span className="sr-only">Tancar sessió</span>
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="right">Tancar sessió</TooltipContent>
+        </Tooltip>
       </TooltipProvider>
     </aside>
   );

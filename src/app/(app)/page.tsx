@@ -9,7 +9,7 @@ import { LeakPrediction } from '@/components/dashboard/leak-prediction';
 import { getMonthlyConsumptionForUser } from '@/lib/data';
 import { Icons } from '@/components/icons';
 
-export default function Home() {
+export default function DashboardPage() {
   const quickLinks = [
     {
       title: 'Detalls de Consum',
