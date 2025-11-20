@@ -118,7 +118,6 @@ export const getMonthlyConsumptionForUser = () => {
         const date = new Date(record.FECHA_HORA);
         const month = date.getMonth();
         const year = date.getFullYear();
-        // We only care about 2024 for this chart
         if (year !== 2024) return;
         const key = `${year}-${month.toString().padStart(2, '0')}`;
         if (!monthlyTotals[key]) {
@@ -169,7 +168,7 @@ export const getAverageMonthlyConsumption = () => {
 export const getAverageDailyConsumption = () => {
     return typedDailyAvgData.map(d => ({
         date: d.FECHA,
-        consumption: d.CONSUMO_REAL,
+        consumption: Math.round(d.CONSUMO_REAL),
     }));
 }
 

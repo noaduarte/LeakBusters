@@ -24,10 +24,10 @@ import {
 } from '@/components/ui/tabs';
 import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
 import {
-  getMonthlyConsumptionForUser,
-  getAverageMonthlyConsumption,
   getDailyConsumptionForMonth,
   getAverageDailyConsumption,
+  getMonthlyConsumptionForYear,
+  getAverageMonthlyConsumption
 } from '@/lib/data';
 import { PageHeader } from '@/components/page-header';
 import { Users } from 'lucide-react';
@@ -39,18 +39,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-const monthlyChartConfig = {
-  userConsumption: {
-    label: 'El Teu Consum',
-    color: 'hsl(var(--chart-1))',
-  },
-  averageConsumption: {
-    label: 'Consum Mitjà',
-    color: 'hsl(var(--chart-2))',
-  },
-};
-
-const dailyChartConfig = {
+const chartConfig = {
   userConsumption: {
     label: 'El Teu Consum',
     color: 'hsl(var(--chart-1))',
@@ -66,16 +55,18 @@ export default function AwarenessPage() {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
-  const userMonthlyConsumption = useMemo(() => getMonthlyConsumptionForUser(), []);
+  const userMonthlyConsumption = useMemo(() => getMonthlyConsumptionForYear(selectedYear), [selectedYear]);
   const averageMonthlyConsumption = useMemo(() => getAverageMonthlyConsumption(), []);
-
+  
   const monthlyCombinedData = useMemo(() => {
-    return averageMonthlyConsumption.map((avg) => {
-      const userMonth = userMonthlyConsumption.find((uc) => uc.month === avg.month);
+    return userMonthlyConsumption.map((userMonthData) => {
+      const avgMonth = averageMonthlyConsumption.find(
+        (avg) => avg.month === userMonthData.month
+      );
       return {
-        month: avg.month,
-        userConsumption: userMonth ? userMonth.consumption : 0,
-        averageConsumption: avg.consumption,
+        month: userMonthData.month,
+        userConsumption: userMonthData.consumption,
+        averageConsumption: avgMonth ? avgMonth.consumption : 0,
       };
     });
   }, [userMonthlyConsumption, averageMonthlyConsumption]);
@@ -93,15 +84,20 @@ export default function AwarenessPage() {
   }, [selectedYear, selectedMonth]);
 
   const dailyCombinedData = useMemo(() => {
-    return userDailyConsumption.map(userDay => {
-      const avgDay = averageDailyConsumption.find(avg => avg.date === userDay.date);
-      return {
-        date: userDay.date,
-        userConsumption: userDay.consumption,
+    const daysInMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate();
+    const data = [];
+    for (let i = 1; i <= daysInMonth; i++) {
+      const dateStr = i.toString();
+      const userDay = userDailyConsumption.find(d => d.date === dateStr);
+      const avgDay = averageDailyConsumption.find(d => d.date === dateStr);
+      data.push({
+        date: dateStr,
+        userConsumption: userDay ? userDay.consumption : 0,
         averageConsumption: avgDay ? avgDay.consumption : 0,
-      }
-    });
-  }, [userDailyConsumption, averageDailyConsumption]);
+      })
+    }
+    return data;
+  }, [userDailyConsumption, averageDailyConsumption, selectedYear, selectedMonth]);
 
   const months = [
     { value: '0', label: 'Gener' },
@@ -165,9 +161,21 @@ export default function AwarenessPage() {
                   </Select>
                 </div>
               )}
+               {activeTab === 'monthly' && (
+                 <Select value={selectedYear.toString()} onValueChange={(val) => setSelectedYear(parseInt(val))}>
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Selecciona un any" />
+                    </SelectTrigger>
+                    <SelectContent>
+                       {years.map(year => (
+                        <SelectItem key={year} value={year}>{year}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+              )}
             </div>
             <TabsContent value="monthly" className="mt-6">
-              <ChartContainer config={monthlyChartConfig} className="h-[400px] w-full">
+              <ChartContainer config={chartConfig} className="h-[400px] w-full">
                 <BarChart data={monthlyCombinedData} accessibilityLayer>
                   <CartesianGrid vertical={false} />
                   <XAxis
@@ -186,13 +194,13 @@ export default function AwarenessPage() {
                   <Legend />
                   <Bar
                     dataKey="userConsumption"
-                    name={monthlyChartConfig.userConsumption.label}
+                    name={chartConfig.userConsumption.label}
                     fill="var(--color-userConsumption)"
                     radius={4}
                   />
                   <Bar
                     dataKey="averageConsumption"
-                    name={monthlyChartConfig.averageConsumption.label}
+                    name={chartConfig.averageConsumption.label}
                     fill="var(--color-averageConsumption)"
                     radius={4}
                   />
@@ -201,7 +209,7 @@ export default function AwarenessPage() {
               <p className="text-center text-sm text-muted-foreground mt-4">El teu consum (blau) enfront de la mitjana de la comunitat (verd).</p>
             </TabsContent>
             <TabsContent value="daily" className="mt-6">
-              <ChartContainer config={dailyChartConfig} className="h-[400px] w-full">
+              <ChartContainer config={chartConfig} className="h-[400px] w-full">
                 <BarChart data={dailyCombinedData} accessibilityLayer>
                   <CartesianGrid vertical={false} />
                   <XAxis
@@ -220,13 +228,13 @@ export default function AwarenessPage() {
                   <Legend />
                   <Bar
                     dataKey="userConsumption"
-                    name={dailyChartConfig.userConsumption.label}
+                    name={chartConfig.userConsumption.label}
                     fill="var(--color-userConsumption)"
                     radius={4}
                   />
                   <Bar
                     dataKey="averageConsumption"
-                    name={dailyChartConfig.averageConsumption.label}
+                    name={chartConfig.averageConsumption.label}
                     fill="var(--color-averageConsumption)"
                     radius={4}
                   />
