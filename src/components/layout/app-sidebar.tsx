@@ -65,6 +65,25 @@ export function AppSidebar() {
               </Tooltip>
             ))}
              <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button
+                    asChild
+                    variant={pathname === '/dashboard/settings' ? 'secondary' : 'ghost'}
+                    size="icon"
+                    className={cn(
+                        'rounded-lg',
+                        pathname === '/dashboard/settings' && 'text-primary'
+                    )}
+                    >
+                    <Link href="/dashboard/settings">
+                        <Settings className="size-5" />
+                        <span className="sr-only">Configuració</span>
+                    </Link>
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent side="right">Configuració</TooltipContent>
+            </Tooltip>
+             <Tooltip>
               <TooltipTrigger asChild>
                 <Button onClick={handleLogout} variant="ghost" size="icon" className="rounded-lg">
                   <LogOut className="size-5" />
