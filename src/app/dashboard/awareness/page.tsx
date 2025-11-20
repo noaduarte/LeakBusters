@@ -46,7 +46,7 @@ const chartConfig = {
   },
   averageConsumption: {
     label: 'Consum Mitjà',
-    color: 'hsl(var(--chart-2))',
+    color: 'hsl(var(--destructive))',
   },
 };
 
@@ -206,7 +206,7 @@ export default function AwarenessPage() {
                   />
                 </BarChart>
               </ChartContainer>
-              <p className="text-center text-sm text-muted-foreground mt-4">El teu consum (blau) enfront de la mitjana de la comunitat (verd).</p>
+              <p className="text-center text-sm text-muted-foreground mt-4">El teu consum (blau) enfront de la mitjana de la comunitat (vermell).</p>
             </TabsContent>
             <TabsContent value="daily" className="mt-6">
               <ChartContainer config={chartConfig} className="h-[400px] w-full">
@@ -240,7 +240,7 @@ export default function AwarenessPage() {
                   />
                 </BarChart>
               </ChartContainer>
-               <p className="text-center text-sm text-muted-foreground mt-4">El teu consum (blau) enfront de la mitjana de la comunitat (verd) per al mes seleccionat.</p>
+               <p className="text-center text-sm text-muted-foreground mt-4">El teu consum (blau) enfront de la mitjana de la comunitat (vermell) per al mes seleccionat.</p>
             </TabsContent>
           </Tabs>
         </CardContent>
