@@ -41,9 +41,9 @@ export default function DashboardPage() {
 
   useEffect(() => {
     if (username) {
-      setGreeting(`Benvingut, ${username}!`);
+      setGreeting(`Benvingut/da ${username},`);
     } else {
-      setGreeting('Benvingut!');
+      setGreeting('Benvingut/da,');
     }
   }, [username]);
 
@@ -55,7 +55,7 @@ export default function DashboardPage() {
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-primary-foreground font-headline">
               {greeting}
             </h1>
-            <p className="mt-1 text-muted-foreground">Aquí tens un resum del teu consum d'aigua.</p>
+            <p className="mt-1 text-muted-foreground">aquí tens un resum del teu consum d'aigua.</p>
          </div>
       </div>
 
