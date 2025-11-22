@@ -10,80 +10,50 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { AlertTriangle, ShieldCheck } from 'lucide-react';
+import { AlertTriangle, ShieldCheck, Zap } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { LeakPredictionDatePicker } from './leak-prediction-date-picker';
 
 export function LeakPrediction() {
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>();
-  const [result, setResult] = useState<'leak' | 'no-leak' | null>(null);
+  const [prediction, setPrediction] = useState<{ risk: 'low' | 'high', percentage: number } | null>(null);
 
   const handlePredictLeak = () => {
-    setResult(null);
-    if (!selectedDate) {
-      return;
-    }
-
-    const day = selectedDate.getDate();
-    const month = selectedDate.getMonth(); // 0 = Gener, 3 = Abril
-
-    // For demonstration, April 15 to 24 will trigger a leak alert.
-    if (month === 3 && day >= 15 && day <= 24) {
-      setResult('leak');
-    } else {
-      setResult('no-leak');
-    }
+    // Generates a random low-risk percentage for "today"
+    const randomPercentage = Math.floor(Math.random() * 11); // 0-10%
+    setPrediction({ risk: 'low', percentage: randomPercentage });
   };
 
   return (
     <Card className="h-full flex flex-col">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 font-headline">
-          <AlertTriangle className="size-6 text-primary" />
-          Predicció de Risc de Fuites
+          <Zap className="size-6 text-primary" />
+          Predicció Ràpida de Fuites
         </CardTitle>
         <CardDescription>
-          Selecciona una data per simular una comprovació de fuites.
+          Fes una comprovació ràpida del risc de fuita per al dia d'avui.
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex-grow flex flex-col gap-4">
-        <div className="flex flex-col space-y-2">
-            <p className="text-sm font-medium">Data per Analitzar</p>
-           <LeakPredictionDatePicker date={selectedDate} onDateChange={setSelectedDate} />
-        </div>
-        
-        {result === 'leak' && (
-          <Alert variant="destructive" className="flex-grow flex flex-col justify-center text-center">
+      <CardContent className="flex-grow flex flex-col justify-center">
+        {prediction && (
+           <Alert className="text-center">
              <div className="flex justify-center mb-2">
-              <AlertTriangle className="h-8 w-8" />
-            </div>
-            <AlertTitle className="text-lg font-bold">Alerta de Fuita!</AlertTitle>
-            <AlertDescription>
-              S'ha detectat un risc de fuita potencial. Es recomana revisar la instal·lació.
-            </AlertDescription>
-          </Alert>
+               <ShieldCheck className="h-8 w-8 text-green-600" />
+             </div>
+             <AlertTitle className="text-lg font-bold">Risc Baix: {prediction.percentage}%</AlertTitle>
+             <AlertDescription>
+               La predicció per avui no mostra anomalies significatives.
+             </AlertDescription>
+           </Alert>
         )}
-        {result === 'no-leak' && (
-          <Alert className="flex-grow flex flex-col justify-center text-center">
-            <div className="flex justify-center mb-2">
-              <ShieldCheck className="h-8 w-8 text-green-600" />
-            </div>
-            <AlertTitle className="text-lg font-bold">Sense Risc de Fuita</AlertTitle>
-            <AlertDescription>
-              No s'ha detectat cap anomalia en el consum per a la data seleccionada.
-            </AlertDescription>
-          </Alert>
-        )}
-        {result === null && (
+         {!prediction && (
              <div className="text-center text-muted-foreground p-4 bg-muted/50 rounded-lg flex flex-col items-center justify-center h-full">
-                <p>Selecciona una data i fes clic a "Comprovar" per analitzar el risc.</p>
+                <p>Fes clic al botó per obtenir una predicció instantània.</p>
             </div>
         )}
-
       </CardContent>
       <CardFooter>
-        <Button onClick={handlePredictLeak} className="w-full" disabled={!selectedDate}>
-          Comprovar si hi ha Fuites
+        <Button onClick={handlePredictLeak} className="w-full">
+          Predeix-me avui
         </Button>
       </CardFooter>
     </Card>

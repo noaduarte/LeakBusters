@@ -11,11 +11,10 @@ import { LineChart } from 'lucide-react';
 import { useState, useMemo } from 'react';
 
 export default function ConsumptionPage() {
-  const defaultDate = new Date('2024-01-01');
-  const [selectedDate, setSelectedDate] = useState<Date>(defaultDate);
-  const [selectedMonth, setSelectedMonth] = useState<number>(defaultDate.getMonth());
-  const [selectedYearForDaily, setSelectedYearForDaily] = useState<number>(defaultDate.getFullYear());
-  const [selectedYearForMonthly, setSelectedYearForMonthly] = useState<number>(defaultDate.getFullYear());
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date('2024-04-15'));
+  const [selectedMonth, setSelectedMonth] = useState<number>(selectedDate.getMonth());
+  const [selectedYearForDaily, setSelectedYearForDaily] = useState<number>(selectedDate.getFullYear());
+  const [selectedYearForMonthly, setSelectedYearForMonthly] = useState<number>(new Date().getFullYear());
 
   const hourlyData = useMemo(() => getHourlyConsumptionForDay(selectedDate), [selectedDate]);
   const dailyData = useMemo(() => getDailyConsumptionForMonth(selectedYearForDaily, selectedMonth), [selectedYearForDaily, selectedMonth]);
@@ -25,15 +24,23 @@ export default function ConsumptionPage() {
   const handleDateChange = (date: Date | undefined) => {
     if (date) {
       setSelectedDate(date);
+      setSelectedMonth(date.getMonth());
+      setSelectedYearForDaily(date.getFullYear());
     }
   };
 
   const handleMonthChange = (month: string) => {
-    setSelectedMonth(parseInt(month, 10));
+    const newMonth = parseInt(month, 10);
+    setSelectedMonth(newMonth);
+    const newDate = new Date(selectedYearForDaily, newMonth, 1);
+    setSelectedDate(newDate);
   };
 
   const handleYearChangeForDaily = (year: string) => {
-    setSelectedYearForDaily(parseInt(year, 10));
+    const newYear = parseInt(year, 10);
+    setSelectedYearForDaily(newYear);
+    const newDate = new Date(newYear, selectedMonth, 1);
+    setSelectedDate(newDate);
   };
   
   const handleYearChangeForMonthly = (year: string) => {
