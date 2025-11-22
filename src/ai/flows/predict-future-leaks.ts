@@ -19,7 +19,7 @@ const PredictFutureLeaksInputSchema = z.object({
   modelFile: z
     .string()
     .describe(
-      'The filename of the trained machine learning model in the "data" directory (e.g., "model_fuites.keras").'
+      'The filename of the trained machine learning model in the "data" directory (e.g., "model_usuari_SCZVVLT64DPF4TZQ.keras").'
     ),
 });
 export type PredictFutureLeaksInput = z.infer<typeof PredictFutureLeaksInputSchema>;

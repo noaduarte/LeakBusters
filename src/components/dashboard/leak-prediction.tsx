@@ -26,7 +26,7 @@ export function LeakPrediction() {
     startTransition(async () => {
       const { data, error } = await predictLeakAction({
         consumptionDataFile: 'dades_user1.json',
-        modelFile: 'model_fuites.keras',
+        modelFile: 'model_usuari_SCZVVLT64DPF4TZQ.keras',
       });
 
       if (error) {
