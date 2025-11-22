@@ -21,13 +21,13 @@ export function LeakPrediction() {
   const handlePredictLeak = () => {
     setResult(null);
     if (!selectedDate) {
-      // Opcionalment, mostrar un error si no s'ha seleccionat data
       return;
     }
 
     const day = selectedDate.getDate();
     const month = selectedDate.getMonth(); // 0 = Gener, 3 = Abril
 
+    // For demonstration, April 15 to 24 will trigger a leak alert.
     if (month === 3 && day >= 15 && day <= 24) {
       setResult('leak');
     } else {
@@ -39,7 +39,7 @@ export function LeakPrediction() {
     <Card className="h-full flex flex-col">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 font-headline">
-          <AlertTriangle className="size-6 text-destructive" />
+          <AlertTriangle className="size-6 text-primary" />
           Predicció de Risc de Fuites
         </CardTitle>
         <CardDescription>
@@ -53,18 +53,22 @@ export function LeakPrediction() {
         </div>
         
         {result === 'leak' && (
-          <Alert variant="destructive">
-            <AlertTriangle className="h-4 w-4" />
-            <AlertTitle>Alerta de Fuita!</AlertTitle>
+          <Alert variant="destructive" className="flex-grow flex flex-col justify-center text-center">
+             <div className="flex justify-center mb-2">
+              <AlertTriangle className="h-8 w-8" />
+            </div>
+            <AlertTitle className="text-lg font-bold">Alerta de Fuita!</AlertTitle>
             <AlertDescription>
-              S'ha detectat un risc de fuita potencial basat en la data seleccionada. Es recomana revisar la instal·lació.
+              S'ha detectat un risc de fuita potencial. Es recomana revisar la instal·lació.
             </AlertDescription>
           </Alert>
         )}
         {result === 'no-leak' && (
-          <Alert>
-            <ShieldCheck className="h-4 w-4" />
-            <AlertTitle>Sense Risc de Fuita</AlertTitle>
+          <Alert className="flex-grow flex flex-col justify-center text-center">
+            <div className="flex justify-center mb-2">
+              <ShieldCheck className="h-8 w-8 text-green-600" />
+            </div>
+            <AlertTitle className="text-lg font-bold">Sense Risc de Fuita</AlertTitle>
             <AlertDescription>
               No s'ha detectat cap anomalia en el consum per a la data seleccionada.
             </AlertDescription>

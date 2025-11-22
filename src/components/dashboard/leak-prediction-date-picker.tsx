@@ -20,7 +20,8 @@ type LeakPredictionDatePickerProps = {
 }
 
 export function LeakPredictionDatePicker({ date, onDateChange }: LeakPredictionDatePickerProps) {
-  const toDate = new Date();
+  const fromDate = new Date('2024-01-01');
+  const toDate = new Date('2024-12-31');
 
   return (
     <Popover>
@@ -43,8 +44,9 @@ export function LeakPredictionDatePicker({ date, onDateChange }: LeakPredictionD
           onSelect={onDateChange}
           initialFocus
           locale={ca}
+          fromDate={fromDate}
           toDate={toDate}
-          disabled={{ after: toDate }}
+          disabled={{ before: fromDate, after: toDate }}
         />
       </PopoverContent>
     </Popover>
