@@ -12,7 +12,7 @@ import monthlyAvgData from '../../data/monthly_avg.json';
 
 const typedConsumptionData: ConsumptionRecord[] = consumptionData as ConsumptionRecord[];
 const typedDailyAvgData: { FECHA: string; CONSUMO_REAL: number }[] = dailyAvgData;
-const typedMonthlyAvgData: { MES: string; CONSUMO_REAL: number }[] = monthlyAvgData;
+const typedMonthlyAvgData: { MONTH_YEAR: string; CONSUMO_REAL: number }[] = monthlyAvgData as any;
 
 
 const getHourlyData = (day: Date): HourlyConsumption[] => {
@@ -159,8 +159,8 @@ export const getYearlyConsumption = (): YearlyConsumption[] => {
 
 export const getAverageMonthlyConsumption = () => {
     const monthNames = ["Gen", "Feb", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Des"];
-    return typedMonthlyAvgData.filter(d => d.MES.startsWith('2024')).map(d => ({
-        month: monthNames[new Date(d.MES).getMonth()],
+    return typedMonthlyAvgData.filter(d => d.MONTH_YEAR.startsWith('2024')).map(d => ({
+        month: monthNames[new Date(d.MONTH_YEAR).getMonth()],
         consumption: Math.round(d.CONSUMO_REAL),
     }));
 }

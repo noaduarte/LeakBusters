@@ -1,50 +1,50 @@
 [
     {
-        "MES":"2024-01",
-        "CONSUMO_REAL":363.5379587546
+        "MONTH_YEAR":"2024-01",
+        "CONSUMO_REAL":9966.8629312537
     },
     {
-        "MES":"2024-02",
-        "CONSUMO_REAL":317.8703116182
+        "MONTH_YEAR":"2024-02",
+        "CONSUMO_REAL":9214.897855387
     },
     {
-        "MES":"2024-03",
-        "CONSUMO_REAL":305.560804526
+        "MONTH_YEAR":"2024-03",
+        "CONSUMO_REAL":9467.8521658049
     },
     {
-        "MES":"2024-04",
-        "CONSUMO_REAL":323.0629955984
+        "MONTH_YEAR":"2024-04",
+        "CONSUMO_REAL":9687.2070017801
     },
     {
-        "MES":"2024-05",
-        "CONSUMO_REAL":325.3710850097
+        "MONTH_YEAR":"2024-05",
+        "CONSUMO_REAL":10083.0560311944
     },
     {
-        "MES":"2024-06",
-        "CONSUMO_REAL":323.8896018543
+        "MONTH_YEAR":"2024-06",
+        "CONSUMO_REAL":9712.7070441638
     },
     {
-        "MES":"2024-07",
-        "CONSUMO_REAL":321.2134561693
+        "MONTH_YEAR":"2024-07",
+        "CONSUMO_REAL":9957.1814868187
     },
     {
-        "MES":"2024-08",
-        "CONSUMO_REAL":274.5912193332
+        "MONTH_YEAR":"2024-08",
+        "CONSUMO_REAL":8501.8534373146
     },
     {
-        "MES":"2024-09",
-        "CONSUMO_REAL":319.9086491849
+        "MONTH_YEAR":"2024-09",
+        "CONSUMO_REAL":9593.7070441638
     },
     {
-        "MES":"2024-10",
-        "CONSUMO_REAL":326.3677927293
+        "MONTH_YEAR":"2024-10",
+        "CONSUMO_REAL":10113.0857845215
     },
     {
-        "MES":"2024-11",
-        "CONSUMO_REAL":317.9227864883
+        "MONTH_YEAR":"2024-11",
+        "CONSUMO_REAL":9493.1361363058
     },
     {
-        "MES":"2024-12",
-        "CONSUMO_REAL":300.7241262143
+        "MONTH_YEAR":"2024-12",
+        "CONSUMO_REAL":9302.7684156989
     }
 ]
