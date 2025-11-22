@@ -52,7 +52,7 @@ export default function DashboardPage() {
       <div className="flex items-center gap-4">
          <Icons.logo className="size-12 shrink-0 text-primary hidden sm:block" />
          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-primary-foreground font-headline">
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground font-headline">
               {greeting}
             </h1>
             <p className="mt-1 text-muted-foreground">aquí tens un resum del teu consum d'aigua.</p>
