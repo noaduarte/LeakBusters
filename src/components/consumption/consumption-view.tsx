@@ -59,11 +59,11 @@ type ConsumptionViewProps = {
   monthlyData: MonthlyConsumption[];
   yearlyData: YearlyConsumption[];
   onDateChange: (date: Date | undefined) => void;
-  onMonthChange: (month: string) => void;
+  onMonthChangeForDaily: (month: string) => void;
   onYearChangeForDaily: (year: string) => void;
   onYearChangeForMonthly: (year: string) => void;
   selectedDate: Date;
-  selectedMonth: number;
+  selectedMonthForDaily: number;
   selectedYearForDaily: number;
   selectedYearForMonthly: number;
 };
@@ -74,16 +74,16 @@ export function ConsumptionView({
   monthlyData,
   yearlyData,
   onDateChange,
-  onMonthChange,
+  onMonthChangeForDaily,
   onYearChangeForDaily,
   onYearChangeForMonthly,
   selectedDate,
-  selectedMonth,
+  selectedMonthForDaily,
   selectedYearForDaily,
   selectedYearForMonthly,
 }: ConsumptionViewProps) {
   const [activeTab, setActiveTab] = useState('horari');
-  const [dailyLeakPrediction, setDailyLeakPrediction] = useState<{ risk: 'low' | 'high', percentage: number } | null>(null);
+  const [leakPrediction, setLeakPrediction] = useState<{ risk: 'low' | 'high', percentage: number } | null>(null);
 
   const currentYear = 2024;
   const years = Array.from({ length: 1 }, (_, i) => (currentYear - i).toString());
@@ -102,28 +102,26 @@ export function ConsumptionView({
     { value: '11', label: 'Desembre' },
   ];
 
-  const handleDailyLeakCheck = () => {
+  const handleLeakCheck = () => {
     const day = selectedDate.getDate();
-    const month = selectedDate.getMonth(); // 0 = Gener, 3 = Abril
+    const month = selectedDate.getMonth(); // 3 = Abril
 
     let percentage: number;
     let risk: 'low' | 'high';
 
     if (month === 3 && day >= 15 && day <= 24) {
-      // High risk: 65-85%
       percentage = Math.floor(Math.random() * (85 - 65 + 1)) + 65;
       risk = 'high';
     } else {
-      // Low risk: 0-10%
       percentage = Math.floor(Math.random() * 11);
       risk = 'low';
     }
-    setDailyLeakPrediction({ risk, percentage });
+    setLeakPrediction({ risk, percentage });
   };
   
   const handleTabChange = (value: string) => {
     setActiveTab(value);
-    setDailyLeakPrediction(null);
+    setLeakPrediction(null);
   }
 
   return (
@@ -152,10 +150,26 @@ export function ConsumptionView({
               )}
               {activeTab === 'daily' && (
                 <>
-                  <ConsumptionDatePicker
-                    date={selectedDate}
-                    onDateChange={onDateChange}
-                  />
+                  <Select value={selectedMonthForDaily.toString()} onValueChange={onMonthChangeForDaily}>
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Selecciona un mes" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {months.map(month => (
+                        <SelectItem key={month.value} value={month.value}>{month.label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                   <Select value={selectedYearForDaily.toString()} onValueChange={onYearChangeForDaily}>
+                    <SelectTrigger className="w-[120px]">
+                      <SelectValue placeholder="Any" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {years.map(year => (
+                        <SelectItem key={year} value={year}>{year}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </>
               )}
               {activeTab === 'monthly' && (
@@ -196,7 +210,35 @@ export function ConsumptionView({
                 />
               </LineChart>
             </ChartContainer>
-             <p className="text-center text-sm text-muted-foreground mt-4">Evolució del consum durant el dia seleccionat.</p>
+            <p className="text-center text-sm text-muted-foreground mt-4">Evolució del consum durant el dia seleccionat.</p>
+            <div className="mt-6 border-t pt-6 flex flex-col items-center gap-4">
+                <Button onClick={handleLeakCheck} className="w-full max-w-sm">
+                    <AlertTriangle className="mr-2 size-4" />
+                    Analitzar Risc de Fuga per a Aquest Dia
+                </Button>
+                 {leakPrediction?.risk === 'high' && (
+                  <Alert variant="destructive" className="w-full max-w-sm text-center">
+                    <div className="flex justify-center mb-2">
+                        <AlertTriangle className="h-8 w-8" />
+                    </div>
+                    <AlertTitle className="text-lg font-bold">Risc Alt: {leakPrediction.percentage}%</AlertTitle>
+                    <AlertDescription>
+                      S'ha detectat un patró de consum anòmal. Es recomana una revisió.
+                    </AlertDescription>
+                  </Alert>
+                )}
+                {leakPrediction?.risk === 'low' && (
+                  <Alert className="w-full max-w-sm text-center">
+                    <div className="flex justify-center mb-2">
+                      <ShieldCheck className="h-8 w-8 text-green-600" />
+                    </div>
+                    <AlertTitle className="text-lg font-bold">Risc Baix: {leakPrediction.percentage}%</AlertTitle>
+                    <AlertDescription>
+                      No s'han detectat anomalies significatives en el consum.
+                    </AlertDescription>
+                  </Alert>
+                )}
+            </div>
           </TabsContent>
           <TabsContent value="daily" className="mt-6">
             <ChartContainer config={chartConfig} className="h-72 w-full">
@@ -215,35 +257,6 @@ export function ConsumptionView({
               </BarChart>
             </ChartContainer>
             <p className="text-center text-sm text-muted-foreground mt-4">Evolució del consum durant els dies del mes seleccionat.</p>
-
-            <div className="mt-6 border-t pt-6 flex flex-col items-center gap-4">
-                <Button onClick={handleDailyLeakCheck} className="w-full max-w-sm">
-                    <AlertTriangle className="mr-2 size-4" />
-                    Analitzar Risc de Fuga per a Aquest Dia
-                </Button>
-                 {dailyLeakPrediction?.risk === 'high' && (
-                  <Alert variant="destructive" className="w-full max-w-sm text-center">
-                    <div className="flex justify-center mb-2">
-                        <AlertTriangle className="h-8 w-8" />
-                    </div>
-                    <AlertTitle className="text-lg font-bold">Risc Alt: {dailyLeakPrediction.percentage}%</AlertTitle>
-                    <AlertDescription>
-                      S'ha detectat un patró de consum anòmal. Es recomana una revisió.
-                    </AlertDescription>
-                  </Alert>
-                )}
-                {dailyLeakPrediction?.risk === 'low' && (
-                  <Alert className="w-full max-w-sm text-center">
-                    <div className="flex justify-center mb-2">
-                      <ShieldCheck className="h-8 w-8 text-green-600" />
-                    </div>
-                    <AlertTitle className="text-lg font-bold">Risc Baix: {dailyLeakPrediction.percentage}%</AlertTitle>
-                    <AlertDescription>
-                      No s'han detectat anomalies significatives en el consum.
-                    </AlertDescription>
-                  </Alert>
-                )}
-            </div>
           </TabsContent>
           <TabsContent value="monthly" className="mt-6">
              <ChartContainer config={chartConfig} className="h-72 w-full">

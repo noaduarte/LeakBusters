@@ -12,35 +12,27 @@ import { useState, useMemo } from 'react';
 
 export default function ConsumptionPage() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date('2024-04-15'));
-  const [selectedMonth, setSelectedMonth] = useState<number>(selectedDate.getMonth());
-  const [selectedYearForDaily, setSelectedYearForDaily] = useState<number>(selectedDate.getFullYear());
+  const [selectedMonthForDaily, setSelectedMonthForDaily] = useState<number>(new Date().getMonth());
+  const [selectedYearForDaily, setSelectedYearForDaily] = useState<number>(new Date().getFullYear());
   const [selectedYearForMonthly, setSelectedYearForMonthly] = useState<number>(new Date().getFullYear());
 
   const hourlyData = useMemo(() => getHourlyConsumptionForDay(selectedDate), [selectedDate]);
-  const dailyData = useMemo(() => getDailyConsumptionForMonth(selectedYearForDaily, selectedMonth), [selectedYearForDaily, selectedMonth]);
+  const dailyData = useMemo(() => getDailyConsumptionForMonth(selectedYearForDaily, selectedMonthForDaily), [selectedYearForDaily, selectedMonthForDaily]);
   const monthlyData = useMemo(() => getMonthlyConsumptionForYear(selectedYearForMonthly), [selectedYearForMonthly]);
   const yearlyData = useMemo(() => getYearlyConsumption(), []);
 
   const handleDateChange = (date: Date | undefined) => {
     if (date) {
       setSelectedDate(date);
-      setSelectedMonth(date.getMonth());
-      setSelectedYearForDaily(date.getFullYear());
     }
   };
-
-  const handleMonthChange = (month: string) => {
-    const newMonth = parseInt(month, 10);
-    setSelectedMonth(newMonth);
-    const newDate = new Date(selectedYearForDaily, newMonth, 1);
-    setSelectedDate(newDate);
+  
+  const handleMonthChangeForDaily = (month: string) => {
+    setSelectedMonthForDaily(parseInt(month, 10));
   };
 
   const handleYearChangeForDaily = (year: string) => {
-    const newYear = parseInt(year, 10);
-    setSelectedYearForDaily(newYear);
-    const newDate = new Date(newYear, selectedMonth, 1);
-    setSelectedDate(newDate);
+    setSelectedYearForDaily(parseInt(year, 10));
   };
   
   const handleYearChangeForMonthly = (year: string) => {
@@ -60,11 +52,11 @@ export default function ConsumptionPage() {
         monthlyData={monthlyData}
         yearlyData={yearlyData}
         onDateChange={handleDateChange}
-        onMonthChange={handleMonthChange}
+        onMonthChangeForDaily={handleMonthChangeForDaily}
         onYearChangeForDaily={handleYearChangeForDaily}
         onYearChangeForMonthly={handleYearChangeForMonthly}
         selectedDate={selectedDate}
-        selectedMonth={selectedMonth}
+        selectedMonthForDaily={selectedMonthForDaily}
         selectedYearForDaily={selectedYearForDaily}
         selectedYearForMonthly={selectedYearForMonthly}
       />
