@@ -3,6 +3,8 @@ import { useState, useMemo } from 'react';
 import {
   Bar,
   BarChart,
+  Line,
+  ComposedChart,
   CartesianGrid,
   XAxis,
   YAxis,
@@ -46,7 +48,7 @@ const chartConfig = {
   },
   averageConsumption: {
     label: 'Consum Mitjà',
-    color: 'hsl(var(--destructive))',
+    color: 'hsl(var(--muted-foreground))',
   },
 };
 
@@ -205,11 +207,11 @@ export default function AwarenessPage() {
                   />
                 </BarChart>
               </ChartContainer>
-              <p className="text-center text-sm text-muted-foreground mt-4">El teu consum (blau) enfront de la mitjana de la comunitat (vermell).</p>
+              <p className="text-center text-sm text-muted-foreground mt-4">El teu consum (blau) enfront de la mitjana de la comunitat (gris).</p>
             </TabsContent>
             <TabsContent value="daily" className="mt-6">
               <ChartContainer config={chartConfig} className="h-[400px] w-full">
-                <BarChart data={dailyCombinedData} accessibilityLayer>
+                <ComposedChart data={dailyCombinedData} accessibilityLayer>
                   <CartesianGrid vertical={false} />
                   <XAxis
                     dataKey="date"
@@ -231,15 +233,16 @@ export default function AwarenessPage() {
                     fill="var(--color-userConsumption)"
                     radius={4}
                   />
-                  <Bar
+                  <Line
                     dataKey="averageConsumption"
                     name={chartConfig.averageConsumption.label}
-                    fill="var(--color-averageConsumption)"
-                    radius={4}
+                    stroke="var(--color-averageConsumption)"
+                    strokeWidth={2}
+                    dot={false}
                   />
-                </BarChart>
+                </ComposedChart>
               </ChartContainer>
-               <p className="text-center text-sm text-muted-foreground mt-4">El teu consum (blau) enfront de la mitjana de la comunitat (vermell) per al mes seleccionat.</p>
+               <p className="text-center text-sm text-muted-foreground mt-4">El teu consum (barres blaves) enfront de la mitjana de la comunitat (línia grisa) per al mes seleccionat.</p>
             </TabsContent>
           </Tabs>
         </CardContent>
