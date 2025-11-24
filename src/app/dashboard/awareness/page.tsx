@@ -41,7 +41,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-const chartConfig = {
+const dailyChartConfig = {
   userConsumption: {
     label: 'El Teu Consum',
     color: 'hsl(var(--chart-1))',
@@ -51,6 +51,17 @@ const chartConfig = {
     color: 'hsl(var(--destructive))',
   },
 };
+
+const monthlyChartConfig = {
+  userConsumption: {
+    label: 'El Teu Consum',
+    color: '#2563eb',
+  },
+  averageConsumption: {
+    label: 'Consum Mitjà',
+    color: '#d1d5db',
+  },
+}
 
 export default function AwarenessPage() {
   const [activeTab, setActiveTab] = useState('monthly');
@@ -176,7 +187,7 @@ export default function AwarenessPage() {
               )}
             </div>
             <TabsContent value="monthly" className="mt-6">
-              <ChartContainer config={chartConfig} className="h-[400px] w-full">
+              <ChartContainer config={monthlyChartConfig} className="h-[400px] w-full">
                 <BarChart data={monthlyCombinedData} accessibilityLayer>
                   <CartesianGrid vertical={false} />
                   <XAxis
@@ -195,14 +206,14 @@ export default function AwarenessPage() {
                   <Legend />
                   <Bar
                     dataKey="userConsumption"
-                    name={chartConfig.userConsumption.label}
-                    fill="var(--color-userConsumption)"
+                    name={monthlyChartConfig.userConsumption.label}
+                    fill={monthlyChartConfig.userConsumption.color}
                     radius={4}
                   />
                   <Bar
                     dataKey="averageConsumption"
-                    name={chartConfig.averageConsumption.label}
-                    fill="var(--color-averageConsumption)"
+                    name={monthlyChartConfig.averageConsumption.label}
+                    fill={monthlyChartConfig.averageConsumption.color}
                     radius={4}
                   />
                 </BarChart>
@@ -210,7 +221,7 @@ export default function AwarenessPage() {
               <p className="text-center text-sm text-muted-foreground mt-4">El teu consum (blau) enfront de la mitjana de la comunitat (gris).</p>
             </TabsContent>
             <TabsContent value="daily" className="mt-6">
-              <ChartContainer config={chartConfig} className="h-[400px] w-full">
+              <ChartContainer config={dailyChartConfig} className="h-[400px] w-full">
                 <ComposedChart data={dailyCombinedData} accessibilityLayer>
                   <CartesianGrid vertical={false} />
                   <XAxis
@@ -229,20 +240,20 @@ export default function AwarenessPage() {
                   <Legend />
                   <Bar
                     dataKey="userConsumption"
-                    name={chartConfig.userConsumption.label}
+                    name={dailyChartConfig.userConsumption.label}
                     fill="var(--color-userConsumption)"
                     radius={4}
                   />
                   <Line
                     dataKey="averageConsumption"
-                    name={chartConfig.averageConsumption.label}
+                    name={dailyChartConfig.averageConsumption.label}
                     stroke="var(--color-averageConsumption)"
                     strokeWidth={2}
                     dot={false}
                   />
                 </ComposedChart>
               </ChartContainer>
-               <p className="text-center text-sm text-muted-foreground mt-4">El teu consum (barres blaves) enfront de la mitjana de la comunitat (línia grisa) per al mes seleccionat.</p>
+               <p className="text-center text-sm text-muted-foreground mt-4">El teu consum (barres blaves) enfront de la mitjana de la comunitat (línia vermella) per al mes seleccionat.</p>
             </TabsContent>
           </Tabs>
         </CardContent>
