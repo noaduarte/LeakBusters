@@ -44,7 +44,7 @@ export function ConsumptionDatePicker({ date, onDateChange, month, year }: Consu
           mode="single"
           selected={date}
           onSelect={onDateChange}
-          month={month !== undefined && year !== undefined ? new Date(year, month) : undefined}
+          defaultMonth={date || (month !== undefined && year !== undefined ? new Date(year, month) : undefined)}
           initialFocus
           locale={ca}
           fromDate={fromDate}
