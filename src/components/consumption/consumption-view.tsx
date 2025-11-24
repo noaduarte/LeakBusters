@@ -104,18 +104,35 @@ export function ConsumptionView({
 
   const handleLeakCheck = () => {
     const day = selectedDate.getDate();
-    const month = selectedDate.getMonth(); // 3 = Abril
+    const month = selectedDate.getMonth(); // 3 = April
 
     let percentage: number;
-    let risk: 'low' | 'high';
 
-    if (month === 3 && day >= 15 && day <= 24) {
-      percentage = Math.floor(Math.random() * (85 - 65 + 1)) + 65;
-      risk = 'high';
+    const specificRiskDates: { [key: string]: number } = {
+      "3-5": 11,  // April 5th
+      "3-16": 86, // April 16th
+      "3-15": 70,
+      "3-17": 72,
+      "3-18": 74,
+      "3-19": 76,
+      "3-20": 80,
+      "3-21": 85,
+      "3-22": 90,
+      "3-23": 95,
+      "3-24": 84,
+    };
+
+    const dateKey = `${month}-${day}`;
+
+    if (specificRiskDates[dateKey] !== undefined) {
+      percentage = specificRiskDates[dateKey];
+    } else if (month === 3 && day >= 15 && day <= 24) {
+      percentage = Math.floor(Math.random() * (95 - 70 + 1)) + 70;
     } else {
-      percentage = Math.floor(Math.random() * 11);
-      risk = 'low';
+      percentage = Math.floor(Math.random() * 26); // 0-25%
     }
+    
+    const risk = percentage > 65 ? 'high' : 'low';
     setLeakPrediction({ risk, percentage });
   };
   
