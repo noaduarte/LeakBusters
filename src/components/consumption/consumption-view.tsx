@@ -123,11 +123,11 @@ export function ConsumptionView({
     };
 
     const dateKey = `${month}-${day}`;
-
+    
     if (specificRiskDates[dateKey] !== undefined) {
       percentage = specificRiskDates[dateKey];
     } else if (month === 3 && day >= 15 && day <= 24) {
-      percentage = Math.floor(Math.random() * (95 - 70 + 1)) + 70;
+       percentage = Math.floor(Math.random() * (85 - 65 + 1)) + 65;
     } else {
       percentage = Math.floor(Math.random() * 26); // 0-25%
     }
@@ -163,6 +163,8 @@ export function ConsumptionView({
                 <ConsumptionDatePicker
                   date={selectedDate}
                   onDateChange={onDateChange}
+                  month={selectedDate.getMonth()}
+                  year={selectedDate.getFullYear()}
                 />
               )}
               {activeTab === 'daily' && (

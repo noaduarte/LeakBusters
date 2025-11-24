@@ -12,9 +12,9 @@ import { useState, useMemo } from 'react';
 
 export default function ConsumptionPage() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date('2024-04-15'));
-  const [selectedMonthForDaily, setSelectedMonthForDaily] = useState<number>(new Date().getMonth());
-  const [selectedYearForDaily, setSelectedYearForDaily] = useState<number>(new Date().getFullYear());
-  const [selectedYearForMonthly, setSelectedYearForMonthly] = useState<number>(new Date().getFullYear());
+  const [selectedMonthForDaily, setSelectedMonthForDaily] = useState<number>(3); // April
+  const [selectedYearForDaily, setSelectedYearForDaily] = useState<number>(2024);
+  const [selectedYearForMonthly, setSelectedYearForMonthly] = useState<number>(2024);
 
   const hourlyData = useMemo(() => getHourlyConsumptionForDay(selectedDate), [selectedDate]);
   const dailyData = useMemo(() => getDailyConsumptionForMonth(selectedYearForDaily, selectedMonthForDaily), [selectedYearForDaily, selectedMonthForDaily]);

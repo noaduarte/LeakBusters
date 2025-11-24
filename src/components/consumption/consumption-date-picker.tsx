@@ -17,9 +17,11 @@ import {
 type ConsumptionDatePickerProps = {
   date: Date | undefined;
   onDateChange: (date: Date | undefined) => void;
+  month?: number;
+  year?: number;
 }
 
-export function ConsumptionDatePicker({ date, onDateChange }: ConsumptionDatePickerProps) {
+export function ConsumptionDatePicker({ date, onDateChange, month, year }: ConsumptionDatePickerProps) {
   const fromDate = new Date('2024-01-01');
   const toDate = new Date('2024-12-31');
 
@@ -42,6 +44,7 @@ export function ConsumptionDatePicker({ date, onDateChange }: ConsumptionDatePic
           mode="single"
           selected={date}
           onSelect={onDateChange}
+          month={month !== undefined && year !== undefined ? new Date(year, month) : undefined}
           initialFocus
           locale={ca}
           fromDate={fromDate}
