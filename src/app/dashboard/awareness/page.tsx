@@ -48,7 +48,7 @@ const chartConfig = {
   },
   averageConsumption: {
     label: 'Consum Mitjà',
-    color: 'hsl(var(--muted-foreground))',
+    color: 'hsl(var(--destructive))',
   },
 };
 
