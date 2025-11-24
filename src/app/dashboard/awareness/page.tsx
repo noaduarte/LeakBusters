@@ -59,7 +59,7 @@ const monthlyChartConfig = {
   },
   averageConsumption: {
     label: 'Consum Mitjà',
-    color: '#d1d5db',
+    color: 'rgba(239, 68, 68, 0.5)', // Light, semi-transparent red
   },
 }
 
