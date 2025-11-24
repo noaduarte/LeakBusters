@@ -109,9 +109,9 @@ export function ConsumptionView({
     let percentage: number;
 
     const specificRiskDates: { [key: string]: number } = {
-      "3-5": 11,  // April 5th
-      "3-16": 86, // April 16th
+      "3-5": 11,
       "3-15": 70,
+      "3-16": 71,
       "3-17": 72,
       "3-18": 74,
       "3-19": 76,
