@@ -109,7 +109,7 @@ export function ConsumptionView({
     let percentage: number;
 
     const specificRiskDates: { [key: string]: number } = {
-      "3-5": 11,
+      "3-5": 11, // April 5th
       "3-15": 70,
       "3-16": 71,
       "3-17": 72,
@@ -127,7 +127,7 @@ export function ConsumptionView({
     if (specificRiskDates[dateKey] !== undefined) {
       percentage = specificRiskDates[dateKey];
     } else if (month === 3 && day >= 15 && day <= 24) {
-       percentage = Math.floor(Math.random() * (85 - 65 + 1)) + 65;
+       percentage = Math.floor(Math.random() * (85 - 70 + 1)) + 70;
     } else {
       percentage = Math.floor(Math.random() * 26); // 0-25%
     }
@@ -242,7 +242,8 @@ export function ConsumptionView({
                     </div>
                     <AlertTitle className="text-lg font-bold">Risc Alt: {leakPrediction.percentage}%</AlertTitle>
                     <AlertDescription>
-                      S'ha detectat un patró de consum anòmal. Es recomana una revisió.
+                      S'ha detectat un patró de consum anòmal. Es recomana una revisió. 
+                      Pots contactar-nos al 900 123 456.
                     </AlertDescription>
                   </Alert>
                 )}
@@ -318,3 +319,5 @@ export function ConsumptionView({
     </Card>
   );
 }
+
+    
